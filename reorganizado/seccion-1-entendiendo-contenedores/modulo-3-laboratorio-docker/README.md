@@ -6,12 +6,12 @@ Este módulo es completamente práctico. Los estudiantes aplicarán todos los co
 
 ## Estructura del Laboratorio
 
-1. [Ejercicios Básicos de Docker](./ejercicios-basicos.md)
-2. [Ejercicios de Dockerfile](./ejercicios-dockerfile.md)
-3. [Ejercicios de Volúmenes y Persistencia](./ejercicios-volumenes.md)
-4. [Ejercicios de Redes](./ejercicios-redes.md)
-5. [Ejercicios de Docker Compose](./ejercicios-docker-compose.md)
-6. [Proyecto Final](./proyecto-final.md)
+1. [Ejercicios Básicos de Docker](./ejercicios-basicos.md) ✅ COMPLETO
+2. [Ejercicios de Dockerfile](./ejercicios-dockerfile.md) ⭐ NUEVO
+3. [Ejercicios de Volúmenes y Persistencia](./ejercicios-volumenes.md) ⭐ NUEVO
+4. [Ejercicios de Redes](./ejercicios-redes.md) ⭐ NUEVO
+5. [Ejercicios de Docker Compose](./ejercicios-docker-compose.md) ⭐ NUEVO
+6. [Proyecto Final: E-Commerce Platform](./proyecto-final.md) ⭐ NUEVO
 
 ## Requisitos Previos
 
