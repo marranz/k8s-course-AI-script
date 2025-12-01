@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <style>
+      .title { font: bold 24px sans-serif; fill: #2c3e50; }
+      .subtitle { font: bold 16px sans-serif; fill: #34495e; }
+      .label { font: 14px sans-serif; fill: #2c3e50; }
+      .small-label { font: 12px sans-serif; fill: #7f8c8d; }
+
+      .hardware { fill: #34495e; }
+      .os { fill: #3498db; }
+      .hypervisor { fill: #9b59b6; }
+      .vm-os { fill: #5dade2; }
+      .app { fill: #2ecc71; }
+      .container-runtime { fill: #e74c3c; }
+      .container { fill: #f39c12; }
+
+      .box { stroke: #2c3e50; stroke-width: 2; rx: 5; }
+      .dashed { stroke-dasharray: 5,5; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">Comparativa: Bare Metal vs Máquinas Virtuales vs Contenedores</text>
+
+  <!-- BARE METAL -->
+  <g transform="translate(50, 80)">
+    <text x="150" y="0" text-anchor="middle" class="subtitle">Bare Metal</text>
+
+    <!-- Hardware -->
+    <rect x="20" y="400" width="260" height="60" class="box hardware"/>
+    <text x="150" y="435" text-anchor="middle" class="label" fill="white">Hardware (CPU, RAM, Disco)</text>
+
+    <!-- OS -->
+    <rect x="20" y="320" width="260" height="70" class="box os"/>
+    <text x="150" y="360" text-anchor="middle" class="label" fill="white">Sistema Operativo</text>
+
+    <!-- Apps -->
+    <rect x="30" y="220" width="70" height="90" class="box app"/>
+    <text x="65" y="260" text-anchor="middle" class="label" fill="white">App 1</text>
+
+    <rect x="115" y="220" width="70" height="90" class="box app"/>
+    <text x="150" y="260" text-anchor="middle" class="label" fill="white">App 2</text>
+
+    <rect x="200" y="220" width="70" height="90" class="box app"/>
+    <text x="235" y="260" text-anchor="middle" class="label" fill="white">App 3</text>
+
+    <!-- Labels -->
+    <text x="150" y="490" text-anchor="middle" class="small-label">✓ Máximo rendimiento</text>
+    <text x="150" y="510" text-anchor="middle" class="small-label">✗ Baja densidad (1-3 apps)</text>
+  </g>
+
+  <!-- VIRTUAL MACHINES -->
+  <g transform="translate(430, 80)">
+    <text x="150" y="0" text-anchor="middle" class="subtitle">Máquinas Virtuales</text>
+
+    <!-- Hardware -->
+    <rect x="20" y="400" width="260" height="60" class="box hardware"/>
+    <text x="150" y="435" text-anchor="middle" class="label" fill="white">Hardware (CPU, RAM, Disco)</text>
+
+    <!-- Host OS -->
+    <rect x="20" y="360" width="260" height="30" class="box os"/>
+    <text x="150" y="380" text-anchor="middle" class="label" fill="white">Sistema Operativo Host</text>
+
+    <!-- Hypervisor -->
+    <rect x="20" y="330" width="260" height="20" class="box hypervisor"/>
+    <text x="150" y="344" text-anchor="middle" class="label" fill="white">Hypervisor</text>
+
+    <!-- VMs -->
+    <g transform="translate(30, 180)">
+      <rect x="0" y="0" width="70" height="140" class="box dashed vm-os" fill-opacity="0.3"/>
+      <rect x="5" y="5" width="60" height="40" class="box vm-os"/>
+      <text x="35" y="28" text-anchor="middle" class="small-label" fill="white">Guest OS</text>
+      <rect x="5" y="50" width="60" height="80" class="box app"/>
+      <text x="35" y="95" text-anchor="middle" class="label" fill="white">App 1</text>
+    </g>
+
+    <g transform="translate(115, 180)">
+      <rect x="0" y="0" width="70" height="140" class="box dashed vm-os" fill-opacity="0.3"/>
+      <rect x="5" y="5" width="60" height="40" class="box vm-os"/>
+      <text x="35" y="28" text-anchor="middle" class="small-label" fill="white">Guest OS</text>
+      <rect x="5" y="50" width="60" height="80" class="box app"/>
+      <text x="35" y="95" text-anchor="middle" class="label" fill="white">App 2</text>
+    </g>
+
+    <g transform="translate(200, 180)">
+      <rect x="0" y="0" width="70" height="140" class="box dashed vm-os" fill-opacity="0.3"/>
+      <rect x="5" y="5" width="60" height="40" class="box vm-os"/>
+      <text x="35" y="28" text-anchor="middle" class="small-label" fill="white">Guest OS</text>
+      <rect x="5" y="50" width="60" height="80" class="box app"/>
+      <text x="35" y="95" text-anchor="middle" class="label" fill="white">App 3</text>
+    </g>
+
+    <!-- Labels -->
+    <text x="150" y="490" text-anchor="middle" class="small-label">✓ Aislamiento completo</text>
+    <text x="150" y="510" text-anchor="middle" class="small-label">✗ Alto overhead (10-50 apps)</text>
+  </g>
+
+  <!-- CONTAINERS -->
+  <g transform="translate(810, 80)">
+    <text x="150" y="0" text-anchor="middle" class="subtitle">Contenedores</text>
+
+    <!-- Hardware -->
+    <rect x="20" y="400" width="260" height="60" class="box hardware"/>
+    <text x="150" y="435" text-anchor="middle" class="label" fill="white">Hardware (CPU, RAM, Disco)</text>
+
+    <!-- OS -->
+    <rect x="20" y="340" width="260" height="50" class="box os"/>
+    <text x="150" y="370" text-anchor="middle" class="label" fill="white">Sistema Operativo</text>
+
+    <!-- Container Runtime -->
+    <rect x="20" y="310" width="260" height="20" class="box container-runtime"/>
+    <text x="150" y="324" text-anchor="middle" class="label" fill="white">Container Runtime (Docker)</text>
+
+    <!-- Containers -->
+    <rect x="30" y="230" width="70" height="70" class="box container"/>
+    <text x="65" y="255" text-anchor="middle" class="small-label">Libs</text>
+    <text x="65" y="275" text-anchor="middle" class="label">App 1</text>
+
+    <rect x="115" y="230" width="70" height="70" class="box container"/>
+    <text x="150" y="255" text-anchor="middle" class="small-label">Libs</text>
+    <text x="150" y="275" text-anchor="middle" class="label">App 2</text>
+
+    <rect x="200" y="230" width="70" height="70" class="box container"/>
+    <text x="235" y="255" text-anchor="middle" class="small-label">Libs</text>
+    <text x="235" y="275" text-anchor="middle" class="label">App 3</text>
+
+    <rect x="30" y="150" width="70" height="70" class="box container"/>
+    <text x="65" y="175" text-anchor="middle" class="small-label">Libs</text>
+    <text x="65" y="195" text-anchor="middle" class="label">App 4</text>
+
+    <rect x="115" y="150" width="70" height="70" class="box container"/>
+    <text x="150" y="175" text-anchor="middle" class="small-label">Libs</text>
+    <text x="150" y="195" text-anchor="middle" class="label">App 5</text>
+
+    <rect x="200" y="150" width="70" height="70" class="box container"/>
+    <text x="235" y="175" text-anchor="middle" class="small-label">Libs</text>
+    <text x="235" y="195" text-anchor="middle" class="label">App 6</text>
+
+    <!-- Labels -->
+    <text x="150" y="490" text-anchor="middle" class="small-label">✓ Muy ligero y rápido</text>
+    <text x="150" y="510" text-anchor="middle" class="small-label">✓ Alta densidad (100-1000+ apps)</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(400, 540)">
+    <text x="0" y="0" class="small-label" font-weight="bold">Leyenda:</text>
+    <rect x="10" y="10" width="15" height="15" class="hardware"/>
+    <text x="30" y="22" class="small-label">Hardware</text>
+
+    <rect x="100" y="10" width="15" height="15" class="os"/>
+    <text x="120" y="22" class="small-label">Sistema Operativo</text>
+
+    <rect x="250" y="10" width="15" height="15" class="app"/>
+    <text x="270" y="22" class="small-label">Aplicación</text>
+
+    <rect x="360" y="10" width="15" height="15" class="container"/>
+    <text x="380" y="22" class="small-label">Contenedor</text>
+  </g>
+</svg>
