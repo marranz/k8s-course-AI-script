@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.1 Beneficios de los Contenedores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0db7ed;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #0db7ed;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            color: #0073e6;
+            font-size: 1.8em;
+            margin: 30px 0 20px 0;
+        }
+
+        p, li {
+            color: #34495e;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding-left: 40px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0db7ed;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .problem-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .solution-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .comparison-table th {
+            background: #0db7ed;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+
+        .comparison-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .comparison-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .comparison-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: bold;
+            color: #0073e6;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .tech-card {
+            background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-card h3 {
+            color: white;
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+        }
+
+        .tech-card p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1em;
+            margin: 0;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: white;
+            color: #0db7ed;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            color: #0db7ed;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .advantages-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .advantage-item {
+            background: linear-gradient(135deg, #0db7ed15 0%, #0073e615 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #0db7ed;
+        }
+
+        .advantage-item strong {
+            color: #0db7ed;
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .emoji {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- SLIDE 1: Portada -->
+        <div class="slide active">
+            <h1>1.1 Beneficios de los Contenedores</h1>
+            <p class="subtitle">Comparación con Bare Metal y VMs</p>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                <img src="images/docker-logo.png" alt="Docker Logo" style="width: 500px; height: auto;">
+            </div>
+        </div>
+
+        <!-- SLIDE 2: El Problema -->
+        <div class="slide">
+            <h2>El Problema: "Funciona en mi máquina"</h2>
+            <div class="problem-box">
+                <h3 style="margin-top: 0;">🤔 ¿Te suena familiar?</h3>
+                <p style="font-size: 1.4em; line-height: 1.6;">
+                    Tu aplicación funciona perfectamente en tu entorno local, pero cuando la llevas a producción...
+                </p>
+            </div>
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="font-size: 1.8em; color: #856404; font-weight: bold; margin-bottom: 20px;">Sucede esto:</p>
+                <img src="images/explosion1.gif" alt="Explosión" style="width: 400px; height: auto; border-radius: 10px;">
+            </div>
+        </div>
+
+        <!-- SLIDE 3: ¿Por qué ocurre esto? -->
+        <div class="slide">
+            <h2>¿Por qué ocurre esto?</h2>
+            <div style="margin-top: 50px;">
+                <ul style="font-size: 1.4em;">
+                    <li style="margin-bottom: 40px;">Diferentes versiones de librerías</li>
+                    <li style="margin-bottom: 40px;">Motores de ejecución incompatibles</li>
+                    <li style="margin-bottom: 40px;">Configuraciones del sistema diferentes</li>
+                    <li style="margin-bottom: 40px;">Tiempos de depuración excesivos</li>
+                </ul>
+            </div>
+            <div class="problem-box" style="margin-top: 60px;">
+                <p style="font-size: 1.5em; text-align: center; margin: 0; font-weight: bold; color: #856404;">
+                    "Funciona en mi máquina" ≠ Funciona en producción
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: La Solución -->
+        <div class="slide">
+            <h2>La Solución: Contenedores</h2>
+            <div class="solution-box">
+                <h3 style="margin-top: 0; color: #155724;">✅ Entorno Consistente</h3>
+                <p style="font-size: 1.4em;">
+                    Lo que tienes en tu entorno local es una <strong>copia exacta</strong> de lo que tendrás en producción.
+                </p>
+            </div>
+            <div style="display: flex; justify-content: space-around; margin-top: 50px; font-size: 1.5em;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3em;">💻</div>
+                    <p>Desarrollo</p>
+                </div>
+                <div style="font-size: 4em; color: #0db7ed;">→</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 3em;">🧪</div>
+                    <p>Testing</p>
+                </div>
+                <div style="font-size: 4em; color: #0db7ed;">→</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 3em;">🚀</div>
+                    <p>Producción</p>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 1.6em; margin-top: 50px; color: #0db7ed; font-weight: bold;">
+                El mismo contenedor en todas partes
+            </p>
+        </div>
+
+        <!-- SLIDE 5: Comparación Rápida -->
+        <div class="slide">
+            <h2>Comparación Rápida</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>🖥️ Bare Metal</h3>
+                    <p>Hardware dedicado</p>
+                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">1-3 apps</p>
+                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">32GB RAM, 8 CPUs</p>
+                    <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.85;">❌ Sin réplicas nativas</p>
+                </div>
+                <div class="tech-card">
+                    <h3>🖼️ VMs</h3>
+                    <p>Sistema operativo completo</p>
+                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">8-15 apps</p>
+                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">32GB RAM, 8 CPUs</p>
+                    <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.85;">⚙️ Réplicas con config. manual</p>
+                </div>
+                <div class="tech-card">
+                    <h3>📦 Contenedores</h3>
+                    <p>Solo el proceso necesario</p>
+                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">50-300+ apps</p>
+                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">32GB RAM, 8 CPUs</p>
+                    <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.85;">✅ Réplicas automáticas fáciles</p>
+                </div>
+            </div>
+            <table class="comparison-table" style="margin-top: 40px;">
+                <tr>
+                    <th>Característica</th>
+                    <th>Bare Metal</th>
+                    <th>VMs</th>
+                    <th>Contenedores</th>
+                </tr>
+                <tr>
+                    <td>Tiempo de arranque</td>
+                    <td>Minutos</td>
+                    <td>1-2 minutos</td>
+                    <td>Segundos ⚡</td>
+                </tr>
+                <tr>
+                    <td>Portabilidad</td>
+                    <td>Baja</td>
+                    <td>Media</td>
+                    <td>Muy Alta 🚀</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SLIDE 6: Tecnologías Clave -->
+        <div class="slide">
+            <h2>Tecnologías Clave del Kernel Linux</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h3>🔧 cgroups (Control Groups)</h3>
+                    <p>Controlan y limitan recursos del sistema:</p>
+                    <ul>
+                        <li>CPU</li>
+                        <li>Memoria</li>
+                        <li>Disco I/O</li>
+                        <li>Red</li>
+                    </ul>
+                    <div class="solution-box" style="margin-top: 20px;">
+                        <p style="margin: 0; font-size: 1.1em;">
+                            <strong>Ejemplo:</strong> Limitar un contenedor a 512MB RAM y 50% CPU
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3>🔒 namespaces</h3>
+                    <p>Aislamiento de diferentes aspectos:</p>
+                    <ul>
+                        <li><strong>PID:</strong> Procesos</li>
+                        <li><strong>Network:</strong> Red y puertos</li>
+                        <li><strong>Mount:</strong> Sistema de archivos</li>
+                        <li><strong>User:</strong> Usuarios y grupos</li>
+                        <li><strong>IPC:</strong> Comunicación entre procesos</li>
+                        <li><strong>UTS:</strong> Hostname</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Ventajas de los Contenedores -->
+        <div class="slide">
+            <h2>Ventajas de los Contenedores</h2>
+            <div class="advantages-list">
+                <div class="advantage-item">
+                    <span class="emoji">⚡</span><strong>Inicio rápido</strong>
+                    <p>Arrancan en segundos, no minutos</p>
+                </div>
+                <div class="advantage-item">
+                    <span class="emoji">💾</span><strong>Eficiencia de recursos</strong>
+                    <p>10-100x menos memoria que VMs</p>
+                </div>
+                <div class="advantage-item">
+                    <span class="emoji">📦</span><strong>Portabilidad</strong>
+                    <p>"Empaqueta una vez, ejecuta en cualquier lugar"</p>
+                </div>
+                <div class="advantage-item">
+                    <span class="emoji">🔄</span><strong>Escalabilidad</strong>
+                    <p>Fácil crear/destruir miles de contenedores</p>
+                </div>
+                <div class="advantage-item">
+                    <span class="emoji">🔧</span><strong>Consistencia</strong>
+                    <p>Elimina "funciona en mi máquina"</p>
+                </div>
+                <div class="advantage-item">
+                    <span class="emoji">🏗️</span><strong>Densidad</strong>
+                    <p>Cientos o miles de apps en el mismo hardware</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Cuándo usar cada tecnología -->
+        <div class="slide">
+            <h2>¿Cuándo usar cada tecnología?</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px;">
+                <div>
+                    <h3 style="text-align: center;">🖥️ Bare Metal</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>Máximo rendimiento</li>
+                        <li>Compliance estricto</li>
+                        <li>Hardware específico</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="text-align: center;">🖼️ VMs</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>Aislamiento completo</li>
+                        <li>Apps legacy</li>
+                        <li>Diferentes kernels</li>
+                        <li>Seguridad extrema</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="text-align: center;">📦 Contenedores</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>Microservicios</li>
+                        <li>Despliegue rápido</li>
+                        <li>Escalado dinámico</li>
+                        <li>CI/CD y DevOps</li>
+                        <li>Cloud-native</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Final -->
+        <div class="slide">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center;">
+                <div style="font-size: 8em; margin-bottom: 30px;">🎉</div>
+                <h1 style="margin-bottom: 30px;">¡Listo para contenedores!</h1>
+                <p style="font-size: 1.8em; color: #7f8c8d;">
+                    Ahora entiendes por qué los contenedores son el futuro del despliegue de aplicaciones
+                </p>
+                <div style="margin-top: 60px; font-size: 1.4em; color: #0db7ed;">
+                    Siguiente: Instalación de Docker 🐳
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+    </div>
+
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Inicializar
+        showSlide(0);
+    </script>
+</body>
+</html>

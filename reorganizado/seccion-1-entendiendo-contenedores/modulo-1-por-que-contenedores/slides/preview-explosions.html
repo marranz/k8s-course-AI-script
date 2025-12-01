@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elige tu explosión favorita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%);
+            padding: 40px;
+            margin: 0;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .option {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .option h2 {
+            color: #0db7ed;
+            margin-bottom: 20px;
+        }
+        .option img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            border: 3px solid #0db7ed;
+        }
+        .option p {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        button {
+            background: #0db7ed;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0073e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Elige tu explosión favorita</h1>
+    <div class="container">
+        <div class="option">
+            <h2>Opción 1</h2>
+            <img src="images/explosion1.gif" alt="Explosión 1">
+            <p>Explosión estilo Michael Bay - Dramática y cinematográfica</p>
+            <p><strong>Tamaño:</strong> 2.6 MB</p>
+            <button onclick="selectExplosion(1)">Usar esta</button>
+        </div>
+
+        <div class="option">
+            <h2>Opción 2</h2>
+            <img src="images/explosion2.gif" alt="Explosión 2">
+            <p>Explosión de fuegos artificiales - Colorida y festiva</p>
+            <p><strong>Tamaño:</strong> 2.2 MB</p>
+            <button onclick="selectExplosion(2)">Usar esta</button>
+        </div>
+
+        <div class="option">
+            <h2>Opción 3</h2>
+            <img src="images/explosion3.gif" alt="Explosión 3">
+            <p>Explosión clásica - Simple y efectiva</p>
+            <p><strong>Tamaño:</strong> 832 KB</p>
+            <button onclick="selectExplosion(3)">Usar esta</button>
+        </div>
+    </div>
+
+    <script>
+        function selectExplosion(num) {
+            alert('Has elegido la Opción ' + num + '!\n\nDile a Claude: "usa la explosion' + num + '.gif"');
+        }
+    </script>
+</body>
+</html>
