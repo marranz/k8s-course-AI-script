@@ -1,0 +1,212 @@
+Sección 1: Entendiendo los Contenedores
+Objetivo: Proporcionar una comprensión sólida de qué son los contenedores, por qué son útiles y la relación entre Docker y containerd, sentando las bases para Kubernetes.
+
+Módulo 1: ¿Por qué Contenedores?
+
+1.1 Beneficios de los contenedores y comparacion con bare meta y VMs.
+
+Un problema comun es que nuestra aplicación funcione perfectamente en nuestro entorno local, pero cuando nos la llevamos a los entornos de produccion o los servidores donde van a estar alojados empezamos a tener problemas. Esos problemas muchas veces son por dependencias. Diferentes versiones de librerias, motores de ejecucion de nuestro lenguaje, etc.
+
+Esto hace que los tiempos de depuracion y arreglar esos errores sean mas largos de lo deseado. Lo que conocemos como el “Funciona en mi maquina”, es decir, la aplicacion funciona perfectamente en mi entorno local pero una vez queiro subirlo a los servidores, ya es otra historia.
+
+Este es uno de los problemas que vamos a solucionar usando contenedores. Lo que tenemos en nuestro entorno local va a ser una copia exacta de lo que vamos a tener en nuestros servidores. No solo en cuanto a codigo y versiones de librerias dentro de nuestro framework, si no tambien de librerias del sistema. Ademas de esto tenemos otras ventajas, esta vez en el lado del uso de recursos.
+
+Bare metal Vs Máquinas Virtuales vs. Contenedores: Una Comparativa.
+
+Historicamente, el despliegue de aplicaciones se hacia directamente en un servidor fisico, preparado para alojar nuestra aplicacion, es decir, que tenia instalado el motor que hacia que nuestra aplicacion pudiera ejecutarse. Esto, aunque puede tener sus ventajas en cuanto a rendimiento de nuestra aplicacion, que podria tener un hardware muy poderoso dedicado,  llevaba a su vez a un monton de problemas a la hora de escalar nuestro hardware. Imaginaos que necesitabamos mas memoria, pues nos tocaba parar la maquina, pinchar la memoria en su correspondiente puerto, y arrancarla de nuevo.
+Este tipo de problemas fueron solucionados con la popularizacion de las maquinas virtuales, donde el hardware completo que da soporte a un sistema operativo es virtualizado, pudiendo configurar maquinas virtuales por cada una de nuestras  aplicaciones en incluso pudiendo cambiar sus especificaciones a golpe de click. Mas memoria, mas cpu o lo que necesitaramos.
+La virtualizacion tambien nos daba una ventaja principal, que es la consolidacion de recursos. Ahora en lugar de tener una maquina fisica , imaginaos, con 32 GB de ram y ocho nucleos de procesador para hostear nuestra aplicacion, disponemos de esos recursos para crear diferentes maquinas virtuales mas pequeñas donde cada una ejecutara un sistema operativo completo con los recursos minimos que necesitemos. Asi aprovechamos mucho mas los recursos.
+Despues llegaron los contenedores, donde en lugar de ejecutar un sistema operativo completo en una maquina virtual, solo ejecutamos una copia del proceso principal que hara que nuestra aplicacion pueda estar corriendo. Con esto conseguimos consolidar los recursos aun mucho mas, eliminando lo que conocemos como el overhead del sistema operativo, es decir, esos recursos que necesitamos consumir solo para que un sistema operativo completo este correindo, cuando de esa maquina virtual, en realidad, solo necesitamos un par de cosas, que es el proceso que da servicio an uestra aplicacion.
+Los contenedores ofrecen un enfoque mucho mas ligero y eficiente para aislar las aplicaciones ahorrando virtualizar todo el hardware de un servidor fisico y simplemente compartiendo esas funciones desde el nucleo o kernel del sitema operativo anfitrion. El aislamiento de recursos se logra utilizando caracteristicas modernas del kernel de linux, como cgroups y namespaces, que permiten optimizar la gestion de recursos y aislar los procesos de red y sistemas de ficheros, etc.
+
+
+1.3. Conceptos fundamentales de los Contenedores. 
+Imágenes: Plantillas inmutables de solo lectura.
+Contenedores: Instancias ejecutables de imágenes.
+Capas (Layers): Cómo se construyen las imágenes de forma eficiente.
+Filesystem CoW (Copy-on-Write): Optimización de espacio y rendimiento.
+
+
+Contenedores (Conceptos fundamentales)
+
+Contenedores e Imagenes
+
+Como hemos dicho antes, diremos que un contenedor es un paquete ligero y portable que podremos usar para ejecutar nuestras aplicaciones. Tiene lo minimo necesario para que nuestra aplicacion pueda correr, es decir, el codigo, el runtime de nuestra aplicacion, las herramientas y librerias del sistema que este mismo utilizara y la configuracion de la aplicacion.
+El contenido de un contenedor viene dado por su imagen. La imagen define que habra en el disco donde ese contenedor esta ejecutandose. Ahi entra todo lo mencionado antes. El runtime, herramientas del sistema, librerias y la configuracion. 
+Imaginaos que queremos un contenedor para nuestra aplicacion de contabilidad, digamos que desarrollada en python. Nuestra aplicacion se llamara PyCont. 
+Usaremos una imagen base que podremos obtener online con python ya preinstalado y todas sus herramientas comunes. Imaginemos que esta imagen se llama python-base:3.6
+ Sobre esta imagen base y tras agregarle nuestro codigo y configuracion para nuestra aplicacion, obtendremos la imagen de nuestro contenedor, a la que ahora si, llamamos PyCont:1.0
+
+El resultado final sera una imagen dedicada para nuestra aplicación. 
+Podremos ahora lanzar tantas copias de nuestra aplicacion como queramos simplemente creando contenedores basados en esta imagen. 
+El contenedor simplemente estara ejecutando un proceso de python por cada contenedore que lancemos. El proceso correra en el contexto de nuestra imagen, es decir, que tendra acceso al código y la configuración.
+Capas (layes) y Filesystem CoW (Copy-on-Write)
+
+Las imagenes de contenedores estan compuestas por un conjunto de capas de solo lectura apiladas. Cada instruccion que le demos al software que se encarga de crear nuestra imagen a traves del fichero de definicion de imagen Dockerfile, creara una nueva capa sobre la anterior. 
+
+Este diseño de capas hace que la eficiencia sea mayor puesto que solo modificara una capa cuando la orden haya sido modificada o cuando una capa anterior haya cambiado. Asi ademas multiple imagenes podrian compartir capas ahorrando espacio en disco y acelerando la descarga de imagenes. 
+Cuando lanzamos un contenedor a partir de una imagen, el engine de contenedores obtendra la imagen, que como hemos dicho es de solo lectura, y agregara una capa de escritura donde el contenedor hara todas las operaciones de escritura como crear nuevos ficheros o modificar los existentes. Este mecanismo es el filesystem CoW (Copy-on-Write)
+De esta forma, un contenedor nunca modificara el archivo de imagen original, si no que ira añadiendo capas de disco segun lo vaya necesitando. Esto es altamente eficiente en entornos donde los ficheros de imagen origniales van a ser reutilizados, ahorrando muchisimo espacio en disco y mejorando el rendimiento puesto que no hace falta crear una copia completa de cada imagen por cada contenedor, como si es habitual en entornos de maquinas virtuales, aunque tambien se puede usar un sistema parecido.
+Cuando el contenedor se elimina, la capa de escritura se pierde por lo tanto todos los datos que ese contenedor habia escrito en disco tambien. Por eso es importante tener en cuenta recursos externos de almacenamiento cuando nuestros contenedores necesitan persistencia de datos. 
+
+
+Módulo 2: Docker: La Plataforma Pionera
+2.1. Historia y Orígenes de Docker.
+De dotCloud a Docker Inc.
+Popularización de los contenedores.
+
+Historia y Orígenes de Docker: De dotCloud a la Popularización de la Contenerización
+
+La idea de aislar procesos y recursos del sistema no es algo que inventaran en Docker. chroot en sistemas Unix se lleva usando desde los años 70. en los 2000 surgieron otras soluciones como Jails en FreeBSD o LXC (Linux containers). 
+
+Tecnicamente se podia hacer lo mismo pero en este contexto emergio docker como una nueva plataforma y un ecosistema completo donde podriamos crear imagenes y compartirlas para que otros pudieran usarlas. Asi el mundo de los contenedores dio un vuelco hasta llegar a convertirse en un estandar de la industria.
+Docker nacio como un proyecto interno de la startup francesa dotCloud en 2008. Utilizaban docker para poder alojar aplicaciones de clientes en su infraestructura, aislando los procesos de cada uno de ellos y haciendolo seguro y sencillo.
+Para 2012 docker se habia refinado tanto que decidieron presentarlo como un proyecto de codigo abierto. Tuvo tanto existo que la empresa dotCloud fue renombrada a Docker Inc, y desde entonces su negocio gira entorno a Docker. 
+
+
+2.2. Arquitectura de Docker.
+Docker Daemon (dockerd): El "cerebro" de Docker.
+Docker CLI: La interfaz de línea de comandos para interactuar con Docker.
+Docker Images: Construcción (Dockerfile), gestión y registro (Docker Hub).
+Docker Containers: Ciclo de vida (crear, iniciar, detener, eliminar).
+Docker desktop
+Registro y Docker hub.
+
+Para poder gestionar contenedores lo primero que necesitamos es el Daemon de docker, docker instalado en nuestro sistema. Este proceso se va a encargar de la gestion y ejecucion de los contenedores y todas las operaciones fundamentales de docker, como la creacion de imagenes, ejecucion de contenedores, gestion de su ciclo de vida, configuracion de red y almacenamiento, etc.
+
+Para interactuar con el demonio de docker, lo comun es usar la linea de comandos o el docker CLI, que nos permitira la gestion de todos estos recursos antes mentionados convirtiendo nuestra ordenes en llamadas a la API del daemon. 
+Desde hace unos años, para entornos de escritorio donde queramos utilizar docker, existe Docker Desktop, una aplicación que nos permite gestionar de una forma sencilla y visual tanto contenedores como imagenes, ademas de gestionar el demonio y la linea de comandos en una unica pantalla.
+También nos permite loguearnos a un registro de docker o desplegar entornos multi contenedor con docker compose y desde hace no mucho, tambien desplegar entornos locales kubernetes.
+Otro concepto clave es el registro de imagenes. El registro es un concepto fundamental en el ecosistema de docker y uno de los puntos clave que hizo que docker se convirtiera en lo que es hoy. 
+Cualquier empresa o particular puede crear sus propias imagenes y subirlas a un registro de forma que estas seran accesible online bien de forma publica o de forma privada. Esto hace que esa imagen podra ser obtenida por cualquier persona con la que queramos compartirla o simplemente por nosotros mismos si quisieramos descargarla en varios servidores.
+Existen varias empresas que ofrecen el servicios e registro, pero para no salir del ecosistema oficial, usaremos el Docker Hub de momento. Docker Hub es donde podremos almacenar nuestras imagenes o bajarnos imagenes de terceros oficiales para poder trabajar con ellas.
+El concepto de registro de imágenes de contenedores es fundamental para el ecosistema Docker, ya que facilita la distribución, el almacenamiento y la gestión de las imágenes. En los ultimos años, docker hub incluye funcionales extra como la creacion automatica de imagenes desde ficheros de definicion Dockerfile que tengamos almacenados en nuestros repositorios de codigo, como Github o BitBucket.
+
+
+
+
+
+
+
+2.3. Demostración Práctica con Docker.
+Instalar docker en un servidor
+Instalar docker desktop en un ordenador
+docker run (ejecutar un contenedor básico).
+docker pull, docker images, docker ps.
+docker exec (interactuar con un contenedor en ejecución).
+docker stop, docker rm.
+Ejemplo sencillo de un Dockerfile para una aplicación web mínima.
+Loguearnos en docker hub desde el CLI
+docker build.
+docker push (opcional, para demostrar el concepto de registro).
+2.2.6. Almacenamiento en Docker: Persistencia de Datos
+
+Los contenedores son por diseño efimeros, es decir, cualquier dato escrito en el sistema de ficheros de un contenedor, se perdera como lagrimas en la lluvia una vez este contenedor sea destruido.
+
+En algunos casos podremos querer tener persistencia de datos, de forma que aunque terminemos el contenedor y lo volvamos a crear,  los datos sigan ahi. Para eso usaremos el sistema de volumenes de docker.
+
+Docker volume create
+Docker bind mounts
+
+Demo:
+Crear un volumen
+Crear un contenedor que utiliza un volumen
+Destruir el volumen
+Diferencia entre volumes y bind mount
+
+2.2.7. Redes en Docker: Conectividad entre Contenedores y el Exterior
+Docker proporciona un sistema en el que podemos gestionar las redes que utiliza tanto para comunicacion entre contenedores como para comunicarse con el exterior.
+
+Por defecto, al crear un contenedor, este se va a conectar a la red predeterminada, normalmente bridge. Esto hace que el contenedor obtenga una ip de una subred, asignada por docker, y pueda comunicarse con el exterior. Para la comunicacion desde el exterior a los puertos del contenedor, tendremos que exponerlos.
+
+Existen arquitecturas mas complejas donde podriamos definir redes personalizadas, como por ejemplo una para nuestra base de datos y una para nuestro servidor web, esto haria que podamos configurar reglas mas complejas y granulares donde definimos a donde y desde donde podran tener conectividad los contenedores de estas redes.  Estas redes las conocemos como user-defined bridge networks y no las veremos durante el curso.
+
+Otro tipo de redes que podemos usar son las tipo Host, donde el contenedor compart la red del host y none donde el contenedor estara aislado a nivel de red. 
+Como dijimos, para poder acceder a los servicios de un contenedor por red, necesitamos exponerl os puertos. Podemos especificar los puertos que una aplicacion necesita usando la instruccion EXPOSE en un Dockerfile. Mas tarde, al lanzar un contenedor basado en una imagen creada a traves de ese dockerfile, docker sabra que puertos tiene que exponer, aunque no es necesario deifnirlos, es recomendable
+
+demo 
+Expose en Dockerfile
+crear el contenedor y exponer el puerto con -P
+especificar el puerto a mapear usando -p 8080:80
+
+
+2.4. Docker Compose: Orquestación Local de Múltiples Contenedores
+Las aplicaciones a menudo estan compuestas por multiples servicios interconectados. Por ejemplo, un servicio que sirve la pagina web y otro que aloja una base de datos.
+Para poder ejecutar estos entornos multi contenedores de una forma seniclla podemos usar docker Compose. Docker compose nos permite definir estos contenedores y su configuración en un fichero de texto YAML y asi con comandos sencillos poder arrancar, parar o eliminar para volver a crerlos, entornos completos.
+Demo:
+Estructura de un docker compose
+Ciclo de vida con docker compose (up, stop, rm)
+Crear una imagen con docker compose (Dockerfile y build)
+persistencia en docker compose
+red en docker compose
+
+
+
+
+Módulo 3: Laboratorio don Docker y docker compose
+
+Módulo 4: Containerd y la Evolución del Runtime de Contenedores
+3.1. La necesidad de estandarización: Open Container Initiative (OCI).
+Contexto: Docker donó su formato de imagen y runtime a la OCI.
+Importancia de los estándares (OCI Image Format Specification, OCI Runtime Specification).
+El desafio ahora para el mundo del software libre era definir y desarrollar un estandar para evitar el lock-in, es decir, evitar que cualquier decision de Docker Inc a nivel de licencias afectara de la noche a la mañana a millones de usuarios que habian hecho una inversion en migrar todas sus cargas de trabajo a contenedores docker. 
+De ahí surgió la iniciativa OCI (Open container initiative), cuya principal meta era estandarizar mediante especificaciones neutrales y abiertas el funcionamiento de los contenedores y asi garantizar un futuro para esta tecnologia. El proyecto esta auspiciado a dia de hoy por la Linux foundation.
+En respuesta a esta iniciativa, Docker Inc decidio donar el formato de las imagenes de contenedor y el codigo del runtime de kubernetes a la iniciativa OCI. Un aplauso para Docker Inc.
+La definicion de imagen de contenedores esta a dia de hoy guiada por la OCI IMage Format specification por tanto cualqueir empresa que asi lo requiera, puede desarrolar su motor de imagenes siempre y cuando cumpla estas especificaciones.
+Lo mismo sucede con la OCI Runtime specification, pero en este caso para el runtime, es decir, el motor donde se ejecutan los contenedores. 
+
+A dia de hoy, algunos e los engines compatibles con OCI serian runC (el original de Docker Inc), containerd, CRI-O y  Podman, entre otros aunque no todos cubren todas las funcionalidades. hablaremos de ello ahora.
+
+Resumiendo.
+Tanto docker engine como containerd siguen las reglas de OCI IMage Format specification, pudiendo usar cualquiera de los dos para crear imagenes compatibles. Existen alternativas como podan, CRI-O o Buildah.
+Para la ejecucion del contenedor basado en una imagen valida, podremos usar cualquier software que se ciña a la OCI Runtime specification. Comunmente, el componente encargado de ejecutar los contenedores a bajo nivel (es decir, comunicarse con el kernel del sistema) es RunC
+RunC se ha adaptado a la definicion OCI Runtime specification, siendo el runtime de bajo nivel que mas se utiliza a dia de hoy para la ejecucion de contenedores. tanto docker engine como Containerd lo utilizan.
+
+
+3.2. Introducción a containerd.
+¿Qué es containerd?: Un runtime de contenedores de alto nivel (CRI-compatible).
+Su relación con Docker: Cómo Docker Engine usa containerd "por debajo".
+Objetivo: Proporcionar una API robusta para la gestión del ciclo de vida de los contenedores (imágenes, ejecución, almacenamiento).
+
+
+Containerd se considera un runtime de contenedores de alto nivel y esta enfocado en la ejecucion de contenedores individuales mediante la linea de comandos o ordenes a traces de su interfaz API.  cube todo lo necesario para crear imagenes, volumenes y configuracion de red, asi como el ciclo de vida del contenedor. 
+Podemos utilizar containerd como un demonio instalado en nuestra maquina linux y interactuar con utilizando la linea de comandos o dejar que sea un componente de kubernetes llamado kubelet el que haga el trabajo por nosotros.
+Aunque suene paradojico tambien podemos instalar docker engine para hacer exactamente lo mismo puesto que este a dia de hoy depende de containerd (no olvidemos que ellos donaron su codigo inicialmente). 
+Si quisieramos utilizar la lnea de comandos para gestionar nuestros contenedores por tanto tenemos dos opciones:
+Instalar docker engine y usar la linea de comandos de docker. Este gestionara los contenedores de forma transparente a traves de containerd, por lo que no necesitamos conocer como funciona containerd, si no docker engine
+Instalar containerd y utilizar el cliente de containerd (ctr) para la gestion de contenedores. 
+Cubriremos las dos opciones durante los siguientes videos.
+
+
+3.3. containerd como el motor por defecto de Kubernetes.
+Contexto histórico: Docker Engine y dockershim en Kubernetes (y su deprecación).
+Ventajas de containerd para Kubernetes:
+Más ligero y eficiente.
+Interfaz más directa con el Container Runtime Interface (CRI) de Kubernetes.
+Mayor estabilidad y rendimiento en entornos de orquestación.
+Otros runtimes CRI-compatibles (mención rápida a CRI-O).
+
+
+Antes de la implementacion de CRI y containerd, el motor por defecto que utilizaba kubernetes para ejecutar contenedores era docker engine. Esto tras la implementación y paso a un estado estable de containerd, ha cambiado, siendo ahora containerd el motor por defecto.
+Para poder ejecutar llamadas a docker daemon, kubernetes utilizaba una capa intermedia conocida como dockershim, que hacia de traductor para las llamadas que kubernetes hacia al runtime las pudiera entender docker y asi no fueran dedicadas para este ultimo. Esto se hizo como preparacion para un futuro estandar. Dockershim fue deprecado en la version 1.20 de kubernetes
+
+Módulo 4: Laboratorio con containerd
+4.1. Configuración de un entorno básico con containerd (sin Docker si es posible, o mostrando la interacción).
+(Esto puede ser un desafío en un entorno de laboratorio rápido, pero es valioso si se puede simplificar).
+Si no se puede una instalación limpia, al menos explicar cómo containerd opera debajo de Docker Desktop o en un cluster Kubernetes (aunque esto último ya sería introducir K8s).
+4.2. Usando ctr (CLI de containerd) para explorar contenedores.
+ctr images ls, ctr containers ls.
+Esto ayuda a los alumnos a ver que containerd es una entidad separada y fundamental.
+
+Conclusiones de la Sección 1:
+Resumen de los conceptos clave.
+Transición hacia la necesidad de orquestación a gran escala, preparando el terreno para la introducción de Kubernetes.
+Reafirmar que Docker sigue siendo una herramienta fundamental para el desarrollo y construcción de imágenes, mientras que containerd es el motor preferido para la ejecución en entornos de producción orquestados por Kubernetes.
+
+Consideraciones adicionales para el curso:
+Demos en vivo: Para esta sección, las demostraciones son cruciales. Muestra la creación de imágenes, el ciclo de vida de los contenedores, y cómo los comandos de Docker se traducen en acciones a nivel de containerd (si es posible con ctr).
+Recursos visuales: Utiliza muchos diagramas para explicar las arquitecturas y las relaciones entre los componentes.
+Participación: Haz preguntas frecuentes para mantener a los alumnos involucrados.
+Ejercicios prácticos: Diseña ejercicios cortos que refuercen los conceptos, como construir un Dockerfile simple y ejecutarlo.
+¿Qué te parece esta estructura? ¿Hay algún punto que quieras enfatizar más o algo que creas que falta o sobra?
+
