@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.2 Tecnologías Clave de los Contenedores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0db7ed;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #0db7ed;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            color: #0073e6;
+            font-size: 1.8em;
+            margin: 30px 0 20px 0;
+        }
+
+        p, li {
+            color: #34495e;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0db7ed;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .tech-box {
+            background: linear-gradient(135deg, #0db7ed15 0%, #0073e615 100%);
+            border-left: 5px solid #0db7ed;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .meme-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .meme-container img {
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .comparison-table th {
+            background: #0db7ed;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+
+        .comparison-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .comparison-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: bold;
+            color: #0073e6;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: white;
+            color: #0db7ed;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            color: #0db7ed;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .emoji-large {
+            font-size: 4em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffd70030 0%, #ffa50030 100%);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        strong {
+            color: #0db7ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- SLIDE 1: Portada -->
+        <div class="slide active">
+            <h1>1.2 Tecnologías Clave</h1>
+            <p class="subtitle">¿Cómo funcionan los contenedores por dentro?</p>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                <img src="images/docker-logo.png" alt="Docker Logo" style="width: 500px; height: auto;">
+            </div>
+            <div class="emoji-large">🔧 ⚙️ 🛠️</div>
+        </div>
+
+        <!-- SLIDE 2: Los contenedores no son magia -->
+        <div class="slide">
+            <h2>Los contenedores NO son magia</h2>
+            <div class="meme-container">
+                <p style="font-size: 1.6em; margin-bottom: 30px; font-style: italic;">
+                    "Docker es simplemente Linux haciendo cosas de Linux"
+                </p>
+                <div style="background: #f8f9fa; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                    <p style="font-size: 3em; margin-bottom: 20px;">🧙‍♂️ ❌</p>
+                    <p style="font-size: 1.8em; color: #0db7ed; font-weight: bold;">Es solo el kernel de Linux trabajando inteligentemente</p>
+                </div>
+            </div>
+            <div class="tech-box">
+                <p style="font-size: 1.4em; text-align: center; margin: 0;">
+                    <strong>Dos tecnologías principales:</strong> cgroups + namespaces
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: cgroups -->
+        <div class="slide">
+            <h2>cgroups (Control Groups)</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>¿Qué hacen?</h3>
+                    <p style="font-size: 1.4em;">Limitan y controlan <strong>cuántos recursos</strong> puede usar un proceso.</p>
+                    <ul style="margin-top: 30px; font-size: 1.2em;">
+                        <li>CPU: "Máximo 50% de una CPU"</li>
+                        <li>Memoria: "Máximo 512MB de RAM"</li>
+                        <li>Disco I/O: "Máximo 10MB/s"</li>
+                        <li>Red: "Máximo 100Mbps"</li>
+                        <li>PIDs: "Máximo 100 procesos"</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="warning-box">
+                        <p style="font-size: 2em; text-align: center; margin-bottom: 20px;">⚠️</p>
+                        <p style="font-size: 1.3em; text-align: center; font-weight: bold;">
+                            Sin cgroups, una app podría consumir TODA la RAM del servidor
+                        </p>
+                    </div>
+                    <div class="code-block" style="margin-top: 30px; font-size: 0.95em;">
+docker run -d \
+  --memory="512m" \
+  --cpus="0.5" \
+  nginx
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color: #7f8c8d;">
+                        Docker usa cgroups internamente
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: namespaces -->
+        <div class="slide">
+            <h2>namespaces</h2>
+            <div style="margin-bottom: 30px;">
+                <p style="font-size: 1.4em;">
+                    Controlan <strong>qué puede ver</strong> un proceso. Es como darle a cada contenedor su propia "realidad alternativa".
+                </p>
+            </div>
+
+            <div class="grid-2" style="margin-top: 40px;">
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.4em;">🔢 PID namespace</h3>
+                    <p>Aislamiento de procesos</p>
+                    <p style="font-size: 0.95em; margin-top: 10px;">Cada contenedor cree que su proceso es PID 1</p>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.4em;">🌐 Network namespace</h3>
+                    <p>Aislamiento de red</p>
+                    <p style="font-size: 0.95em; margin-top: 10px;">Cada contenedor tiene su propio puerto 80</p>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.4em;">📁 Mount namespace</h3>
+                    <p>Aislamiento de filesystem</p>
+                    <p style="font-size: 0.95em; margin-top: 10px;">No puede ver archivos de otros contenedores</p>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.4em;">👤 User namespace</h3>
+                    <p>Aislamiento de usuarios</p>
+                    <p style="font-size: 0.95em; margin-top: 10px;">Root en el contenedor ≠ root en el host</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; padding: 25px; background: #d4edda; border-radius: 10px;">
+                <p style="font-size: 1.5em; color: #155724; margin: 0;">
+                    <strong>6 tipos de namespaces</strong> trabajando juntos = aislamiento completo
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Ejemplo visual namespaces -->
+        <div class="slide">
+            <h2>Namespaces en acción: Ejemplo PID</h2>
+
+            <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 50px;">
+                <div style="flex: 1; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 40px; border-radius: 15px;">
+                        <h3 style="color: white; margin-bottom: 20px;">Dentro del Contenedor</h3>
+                        <div class="code-block" style="text-align: left; font-size: 1em;">
+$ ps aux
+USER  PID  COMMAND
+root    1  nginx
+root   45  php-fpm
+                        </div>
+                        <p style="font-size: 1.3em; margin-top: 20px;">
+                            "Soy el único proceso aquí" 😊
+                        </p>
+                    </div>
+                </div>
+
+                <div style="font-size: 4em; margin: 0 30px;">
+                    ≠
+                </div>
+
+                <div style="flex: 1; text-align: center;">
+                    <div style="background: #34495e; color: white; padding: 40px; border-radius: 15px;">
+                        <h3 style="color: white; margin-bottom: 20px;">En el Host</h3>
+                        <div class="code-block" style="text-align: left; font-size: 1em;">
+$ ps aux | grep nginx
+USER   PID  COMMAND
+root  1523  nginx
+root  1587  php-fpm
+                        </div>
+                        <p style="font-size: 1.3em; margin-top: 20px;">
+                            El mismo proceso con PID diferente 🤯
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-box" style="margin-top: 50px;">
+                <p style="text-align: center; font-size: 1.4em; margin: 0;">
+                    <strong>Resultado:</strong> El contenedor no puede ver ni matar procesos de otros contenedores
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Otras tecnologías -->
+        <div class="slide">
+            <h2>Otras Tecnologías Importantes</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-top: 30px;">
+                <div class="tech-box">
+                    <h3 style="margin-top: 0;">📚 UnionFS (OverlayFS)</h3>
+                    <p>Sistema de archivos en capas</p>
+                    <ul style="font-size: 1em;">
+                        <li>Imágenes = capas de solo lectura</li>
+                        <li>Contenedor = capa de escritura encima</li>
+                        <li>Ahorro masivo de espacio</li>
+                    </ul>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0;">🔐 Capabilities</h3>
+                    <p>Permisos granulares de Linux</p>
+                    <ul style="font-size: 1em;">
+                        <li>No todo o nada (no solo root)</li>
+                        <li>Dar solo permisos necesarios</li>
+                        <li>Mayor seguridad</li>
+                    </ul>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0;">🛡️ SELinux / AppArmor</h3>
+                    <p>Mandatory Access Control</p>
+                    <ul style="font-size: 1em;">
+                        <li>Políticas de seguridad extra</li>
+                        <li>Limita qué puede hacer un proceso</li>
+                        <li>Incluso con permisos de root</li>
+                    </ul>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0;">🚫 Seccomp</h3>
+                    <p>Filtrado de system calls</p>
+                    <ul style="font-size: 1em;">
+                        <li>Bloquea syscalls peligrosas</li>
+                        <li>Ejemplo: reboot(), mount()</li>
+                        <li>Previene ataques desde contenedor</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.8em; color: #0db7ed;">
+                    🛡️ Seguridad en capas = Contenedor seguro
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Todo junto -->
+        <div class="slide">
+            <h2>¿Cómo trabajan juntas?</h2>
+
+            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px; border-radius: 15px; margin-top: 30px;">
+                <p style="text-align: center; font-size: 1.6em; margin-bottom: 40px; color: #0db7ed; font-weight: bold;">
+                    Cuando ejecutas: <code style="background: #2c3e50; color: white; padding: 5px 15px; border-radius: 5px;">docker run nginx</code>
+                </p>
+
+                <div style="display: grid; gap: 20px;">
+                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0db7ed;">
+                        <div style="font-size: 2em; margin-right: 20px;">1️⃣</div>
+                        <div>
+                            <strong>Namespaces:</strong> Crean el aislamiento ("este es tu mundo privado")
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0073e6;">
+                        <div style="font-size: 2em; margin-right: 20px;">2️⃣</div>
+                        <div>
+                            <strong>cgroups:</strong> Limitan los recursos ("estos son tus límites")
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #9b59b6;">
+                        <div style="font-size: 2em; margin-right: 20px;">3️⃣</div>
+                        <div>
+                            <strong>UnionFS:</strong> Proporciona el filesystem eficiente
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #2ecc71;">
+                        <div style="font-size: 2em; margin-right: 20px;">4️⃣</div>
+                        <div>
+                            <strong>Capabilities + SELinux + Seccomp:</strong> Seguridad extra
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; font-size: 2em;">
+                <span style="color: #0db7ed;">🎯</span> = Contenedor seguro, aislado y eficiente
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Comparación VMs vs Contenedores (técnico) -->
+        <div class="slide">
+            <h2>VMs vs Contenedores (nivel técnico)</h2>
+
+            <table class="comparison-table" style="margin-top: 30px;">
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Máquinas Virtuales</th>
+                    <th>Contenedores</th>
+                </tr>
+                <tr>
+                    <td>Aislamiento</td>
+                    <td>Hypervisor virtualiza hardware</td>
+                    <td><strong>Namespaces</strong> aislan procesos</td>
+                </tr>
+                <tr>
+                    <td>Kernel</td>
+                    <td>Cada VM tiene su propio kernel</td>
+                    <td>Todos comparten kernel del host</td>
+                </tr>
+                <tr>
+                    <td>Arranque</td>
+                    <td>Boot completo del OS (1-2 min)</td>
+                    <td>Solo lanzar proceso (&lt; 1 seg) ⚡</td>
+                </tr>
+                <tr>
+                    <td>Overhead</td>
+                    <td>512MB-2GB solo para el OS 😰</td>
+                    <td>~5-50MB para el contenedor 🎉</td>
+                </tr>
+                <tr>
+                    <td>Control de recursos</td>
+                    <td>Hypervisor asigna recursos</td>
+                    <td><strong>cgroups</strong> limitan recursos</td>
+                </tr>
+                <tr>
+                    <td>Seguridad</td>
+                    <td>Muy fuerte (kernel aislado)</td>
+                    <td>Fuerte (mismo kernel, múltiples capas)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SLIDE 9: Resumen final -->
+        <div class="slide">
+            <h2>Resumen: Las Tecnologías Clave</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 40px;">
+                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🎯</div>
+                    <h3 style="color: white; font-size: 1.5em;">cgroups</h3>
+                    <p style="font-size: 1.1em;">Control de recursos</p>
+                </div>
+
+                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🔒</div>
+                    <h3 style="color: white; font-size: 1.5em;">namespaces</h3>
+                    <p style="font-size: 1.1em;">Aislamiento</p>
+                </div>
+
+                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">📚</div>
+                    <h3 style="color: white; font-size: 1.5em;">UnionFS</h3>
+                    <p style="font-size: 1.1em;">Filesystem eficiente</p>
+                </div>
+            </div>
+
+            <div style="background: #d4edda; padding: 40px; border-radius: 15px; margin-top: 50px; text-align: center;">
+                <p style="font-size: 1.8em; color: #155724; margin: 0;">
+                    <strong>Todo esto junto</strong> = La "magia" de Docker 🐳
+                </p>
+                <p style="font-size: 1.3em; color: #155724; margin-top: 20px;">
+                    (Spoiler: no es magia, es ingeniería del kernel de Linux)
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; font-size: 1.5em; color: #0db7ed;">
+                Siguiente: Conceptos Fundamentales →
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">9</span>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('totalSlides').textContent = totalSlides;
+
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
+            showSlide(currentSlideIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        showSlide(0);
+    </script>
+</body>
+</html>
