@@ -253,26 +253,7 @@
             <div class="emoji-large">🔧 ⚙️ 🛠️</div>
         </div>
 
-        <!-- SLIDE 2: Los contenedores no son magia -->
-        <div class="slide">
-            <h2>Los contenedores NO son magia</h2>
-            <div class="meme-container">
-                <p style="font-size: 1.6em; margin-bottom: 30px; font-style: italic;">
-                    "Docker es simplemente Linux haciendo cosas de Linux"
-                </p>
-                <div style="background: #f8f9fa; padding: 40px; border-radius: 15px; margin: 30px 0;">
-                    <p style="font-size: 3em; margin-bottom: 20px;">🧙‍♂️ ❌</p>
-                    <p style="font-size: 1.8em; color: #0db7ed; font-weight: bold;">Es solo el kernel de Linux trabajando inteligentemente</p>
-                </div>
-            </div>
-            <div class="tech-box">
-                <p style="font-size: 1.4em; text-align: center; margin: 0;">
-                    <strong>Dos tecnologías principales:</strong> cgroups + namespaces
-                </p>
-            </div>
-        </div>
-
-        <!-- SLIDE 3: cgroups -->
+        <!-- SLIDE 2: cgroups -->
         <div class="slide">
             <h2>cgroups (Control Groups)</h2>
             <div class="grid-2">
@@ -307,7 +288,7 @@ docker run -d \
             </div>
         </div>
 
-        <!-- SLIDE 4: namespaces -->
+        <!-- SLIDE 3: namespaces -->
         <div class="slide">
             <h2>namespaces</h2>
             <div style="margin-bottom: 30px;">
@@ -316,40 +297,52 @@ docker run -d \
                 </p>
             </div>
 
-            <div class="grid-2" style="margin-top: 40px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
                 <div class="tech-box">
-                    <h3 style="margin-top: 0; font-size: 1.4em;">🔢 PID namespace</h3>
-                    <p>Aislamiento de procesos</p>
-                    <p style="font-size: 0.95em; margin-top: 10px;">Cada contenedor cree que su proceso es PID 1</p>
+                    <h3 style="margin-top: 0; font-size: 1.3em;">🔢 PID namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de procesos</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Cada contenedor cree que su proceso es PID 1</p>
                 </div>
 
                 <div class="tech-box">
-                    <h3 style="margin-top: 0; font-size: 1.4em;">🌐 Network namespace</h3>
-                    <p>Aislamiento de red</p>
-                    <p style="font-size: 0.95em; margin-top: 10px;">Cada contenedor tiene su propio puerto 80</p>
+                    <h3 style="margin-top: 0; font-size: 1.3em;">🌐 Network namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de red</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Cada contenedor tiene su propio puerto 80</p>
                 </div>
 
                 <div class="tech-box">
-                    <h3 style="margin-top: 0; font-size: 1.4em;">📁 Mount namespace</h3>
-                    <p>Aislamiento de filesystem</p>
-                    <p style="font-size: 0.95em; margin-top: 10px;">No puede ver archivos de otros contenedores</p>
+                    <h3 style="margin-top: 0; font-size: 1.3em;">📁 Mount namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de filesystem</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">No puede ver archivos de otros contenedores</p>
                 </div>
 
                 <div class="tech-box">
-                    <h3 style="margin-top: 0; font-size: 1.4em;">👤 User namespace</h3>
-                    <p>Aislamiento de usuarios</p>
-                    <p style="font-size: 0.95em; margin-top: 10px;">Root en el contenedor ≠ root en el host</p>
+                    <h3 style="margin-top: 0; font-size: 1.3em;">👤 User namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de usuarios</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Root en el contenedor ≠ root en el host</p>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.3em;">🖥️ UTS namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de hostname</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Cada contenedor puede tener su propio nombre de host</p>
+                </div>
+
+                <div class="tech-box">
+                    <h3 style="margin-top: 0; font-size: 1.3em;">💬 IPC namespace</h3>
+                    <p style="font-size: 0.9em;">Aislamiento de comunicación</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Procesos de diferentes contenedores no pueden comunicarse por IPC</p>
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 40px; padding: 25px; background: #d4edda; border-radius: 10px;">
+            <div style="text-align: center; margin-top: 35px; padding: 25px; background: #d4edda; border-radius: 10px;">
                 <p style="font-size: 1.5em; color: #155724; margin: 0;">
                     <strong>6 tipos de namespaces</strong> trabajando juntos = aislamiento completo
                 </p>
             </div>
         </div>
 
-        <!-- SLIDE 5: Ejemplo visual namespaces -->
+        <!-- SLIDE 4: Ejemplo visual namespaces -->
         <div class="slide">
             <h2>Namespaces en acción: Ejemplo PID</h2>
 
@@ -396,7 +389,7 @@ root  1587  php-fpm
             </div>
         </div>
 
-        <!-- SLIDE 6: Otras tecnologías -->
+        <!-- SLIDE 5: Otras tecnologías -->
         <div class="slide">
             <h2>Otras Tecnologías Importantes</h2>
 
@@ -449,7 +442,7 @@ root  1587  php-fpm
             </div>
         </div>
 
-        <!-- SLIDE 7: Todo junto -->
+        <!-- SLIDE 6: Todo junto -->
         <div class="slide">
             <h2>¿Cómo trabajan juntas?</h2>
 
@@ -494,7 +487,7 @@ root  1587  php-fpm
             </div>
         </div>
 
-        <!-- SLIDE 8: Comparación VMs vs Contenedores (técnico) -->
+        <!-- SLIDE 7: Comparación VMs vs Contenedores (técnico) -->
         <div class="slide">
             <h2>VMs vs Contenedores (nivel técnico)</h2>
 
@@ -537,7 +530,7 @@ root  1587  php-fpm
             </table>
         </div>
 
-        <!-- SLIDE 9: Resumen final -->
+        <!-- SLIDE 8: Resumen final -->
         <div class="slide">
             <h2>Resumen: Las Tecnologías Clave</h2>
 
@@ -577,7 +570,7 @@ root  1587  php-fpm
     </div>
 
     <div class="slide-number">
-        <span id="currentSlide">1</span> / <span id="totalSlides">9</span>
+        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
     </div>
 
     <div class="controls">
