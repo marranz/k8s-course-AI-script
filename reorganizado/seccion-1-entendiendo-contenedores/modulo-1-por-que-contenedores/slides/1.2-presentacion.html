@@ -345,60 +345,147 @@ docker run -d \
             </div>
         </div>
 
-        <!-- SLIDE 4: Otras tecnologías -->
+        <!-- SLIDE 4: UnionFS -->
         <div class="slide">
-            <h2>Otras Tecnologías Importantes</h2>
+            <h2>📚 Union Filesystem (UnionFS)</h2>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-top: 30px;">
-                <div class="tech-box">
-                    <h3 style="margin-top: 0;">📚 UnionFS (OverlayFS)</h3>
-                    <p>Sistema de archivos en capas</p>
-                    <ul style="font-size: 1em;">
-                        <li>Imágenes = capas de solo lectura</li>
-                        <li>Contenedor = capa de escritura encima</li>
-                        <li>Ahorro masivo de espacio</li>
+            <div style="background: #f0f4c3; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                <p style="font-size: 1.4em; margin: 0; color: #856404;">
+                    <strong>Sistema de archivos en capas</strong> - Permite que múltiples contenedores compartan las mismas capas base
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h3 style="color: #0db7ed;">¿Cómo funciona?</h3>
+                    <ul style="font-size: 1.3em; line-height: 2; color: #2c3e50;">
+                        <li>📖 Las imágenes son <strong>capas de solo lectura</strong></li>
+                        <li>✍️ El contenedor añade una <strong>capa de escritura</strong> encima</li>
+                        <li>🔗 Todas las capas se <strong>"unen"</strong> en un único filesystem</li>
                     </ul>
                 </div>
 
-                <div class="tech-box">
-                    <h3 style="margin-top: 0;">🔐 Capabilities</h3>
-                    <p>Permisos granulares de Linux</p>
-                    <ul style="font-size: 1em;">
-                        <li>No todo o nada (no solo root)</li>
-                        <li>Dar solo permisos necesarios</li>
-                        <li>Mayor seguridad</li>
-                    </ul>
-                </div>
-
-                <div class="tech-box">
-                    <h3 style="margin-top: 0;">🛡️ SELinux / AppArmor</h3>
-                    <p>Mandatory Access Control</p>
-                    <ul style="font-size: 1em;">
-                        <li>Políticas de seguridad extra</li>
-                        <li>Limita qué puede hacer un proceso</li>
-                        <li>Incluso con permisos de root</li>
-                    </ul>
-                </div>
-
-                <div class="tech-box">
-                    <h3 style="margin-top: 0;">🚫 Seccomp</h3>
-                    <p>Filtrado de system calls</p>
-                    <ul style="font-size: 1em;">
-                        <li>Bloquea syscalls peligrosas</li>
-                        <li>Ejemplo: reboot(), mount()</li>
-                        <li>Previene ataques desde contenedor</li>
+                <div>
+                    <h3 style="color: #0db7ed;">Ventajas</h3>
+                    <ul style="font-size: 1.3em; line-height: 2; color: #2c3e50;">
+                        <li>💾 <strong>Ahorro masivo</strong> de espacio en disco</li>
+                        <li>⚡ <strong>Inicio muy rápido</strong> de contenedores</li>
+                        <li>🔄 Múltiples contenedores <strong>comparten</strong> capas base</li>
                     </ul>
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 40px;">
-                <p style="font-size: 1.8em; color: #0db7ed;">
-                    🛡️ Seguridad en capas = Contenedor seguro
+            <div style="text-align: center; margin-top: 50px; padding: 25px; background: #e3f2fd; border-radius: 10px;">
+                <p style="font-size: 1.3em; color: #0073e6; margin: 0;">
+                    🎯 Eficiencia de almacenamiento: Un contenedor ocupa solo MB, no GB
                 </p>
             </div>
         </div>
 
-        <!-- SLIDE 5: Todo junto -->
+        <!-- SLIDE 5: Capabilities -->
+        <div class="slide">
+            <h2>🔐 Linux Capabilities</h2>
+
+            <div style="background: #fff3cd; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                <p style="font-size: 1.4em; margin: 0; color: #856404;">
+                    <strong>Permisos granulares</strong> - En lugar de todo o nada (root vs no-root), Linux permite otorgar capacidades específicas
+                </p>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="color: #0db7ed; text-align: center;">Ejemplos de Capabilities</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px;">
+                    <div style="background: white; padding: 20px; border-left: 4px solid #ffc107; border-radius: 5px;">
+                        <p style="font-size: 1.1em; margin: 0; font-weight: bold;">CAP_NET_BIND_SERVICE</p>
+                        <p style="font-size: 1em; margin: 10px 0 0 0; color: #7f8c8d;">Enlazar puertos &lt; 1024</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-left: 4px solid #ffc107; border-radius: 5px;">
+                        <p style="font-size: 1.1em; margin: 0; font-weight: bold;">CAP_NET_ADMIN</p>
+                        <p style="font-size: 1em; margin: 10px 0 0 0; color: #7f8c8d;">Configurar interfaces de red</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-left: 4px solid #ffc107; border-radius: 5px;">
+                        <p style="font-size: 1.1em; margin: 0; font-weight: bold;">CAP_SYS_TIME</p>
+                        <p style="font-size: 1em; margin: 10px 0 0 0; color: #7f8c8d;">Cambiar el reloj del sistema</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-left: 4px solid #ffc107; border-radius: 5px;">
+                        <p style="font-size: 1.1em; margin: 0; font-weight: bold;">CAP_SYS_ADMIN</p>
+                        <p style="font-size: 1em; margin: 10px 0 0 0; color: #7f8c8d;">Operaciones administrativas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding: 25px; background: #d4edda; border-radius: 10px;">
+                <p style="font-size: 1.3em; color: #155724; margin: 0;">
+                    🎯 Principio: Dar <strong>solo los permisos necesarios</strong>, ni más ni menos
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: SELinux / AppArmor -->
+        <div class="slide">
+            <h2>🛡️ SELinux / AppArmor</h2>
+
+            <div style="background: #f8d7da; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                <p style="font-size: 1.4em; margin: 0; color: #721c24;">
+                    <strong>Mandatory Access Control (MAC)</strong> - Políticas de seguridad que limitan qué puede hacer un proceso, incluso si es root
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px;">
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 30px; border-radius: 10px;">
+                    <h3 style="margin-top: 0; color: white; font-size: 1.5em;">🐧 SELinux</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>Usado en Red Hat, CentOS, Fedora</li>
+                        <li>Muy completo pero complejo</li>
+                        <li>Políticas muy granulares</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #4ecdc4 0%, #44a0a0 100%); color: white; padding: 30px; border-radius: 10px;">
+                    <h3 style="margin-top: 0; color: white; font-size: 1.5em;">🎨 AppArmor</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>Usado en Ubuntu, Debian</li>
+                        <li>Más sencillo de configurar</li>
+                        <li>Basado en perfiles de aplicaciones</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding: 25px; background: #e2e3e5; border-radius: 10px;">
+                <p style="font-size: 1.3em; color: #383d41; margin: 0;">
+                    🔐 Incluso si un contenedor es comprometido, MAC limita qué daño puede hacer
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Seccomp -->
+        <div class="slide">
+            <h2>🚫 Seccomp (Secure Computing Mode)</h2>
+
+            <div style="background: #cfe2ff; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                <p style="font-size: 1.4em; margin: 0; color: #084298;">
+                    <strong>Filtrado de system calls</strong> - Bloquea las llamadas al kernel que un proceso puede hacer
+                </p>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="color: #0db7ed; text-align: center;">System Calls Bloqueadas por Defecto en Docker</h3>
+                <div style="background: #2c3e50; color: #ecf0f1; padding: 30px; border-radius: 10px; margin: 30px 0; font-family: 'Courier New', monospace;">
+                    <p style="font-size: 1.2em; margin: 0;">❌ reboot()   - Reiniciar el sistema</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ mount()   - Montar filesystems</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ swapon()  - Cambiar configuración de swap</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ ptrace()  - Depurar otros procesos</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding: 25px; background: #d4edda; border-radius: 10px;">
+                <p style="font-size: 1.3em; color: #155724; margin: 0;">
+                    🛡️ Previene que un contenedor comprometido haga operaciones peligrosas en el host
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Todo junto -->
         <div class="slide">
             <h2>¿Cómo trabajan juntas?</h2>
 
@@ -443,7 +530,7 @@ docker run -d \
             </div>
         </div>
 
-        <!-- SLIDE 6: Comparación VMs vs Contenedores (técnico) -->
+        <!-- SLIDE 9: Comparación VMs vs Contenedores (técnico) -->
         <div class="slide">
             <h2>VMs vs Contenedores (nivel técnico)</h2>
 
@@ -486,7 +573,7 @@ docker run -d \
             </table>
         </div>
 
-        <!-- SLIDE 7: Resumen final -->
+        <!-- SLIDE 10: Resumen final -->
         <div class="slide">
             <h2>Resumen: Las Tecnologías Clave</h2>
 
