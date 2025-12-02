@@ -388,55 +388,90 @@
             <div
                 style="margin-top: 30px; padding: 30px; background: #d4edda; border-radius: 10px; border-left: 5px solid #28a745;">
                 <h3 style="color: #155724; margin: 0 0 15px 0;">Resultado: Imagen PyTweets:1.0</h3>
-                <p style="margin: 0 0 15px 0; font-size: 1.2em; color: #155724;">
+                <p style="margin: 0; font-size: 1.2em; color: #155724;">
                     Una imagen lista para ejecutar nuestra aplicación PyTweets
-                </p>
-                <p style="margin: 0; font-size: 1.1em; color: #155724;">
-                    <strong>Tags de imagen:</strong> En futuras versiones, cuando modifiquemos el código, crearemos una
-                    nueva imagen llamada <code
-                        style="background: white; padding: 3px 8px; border-radius: 3px; color: #155724;">PyTweets:1.1</code>.
-                    El número es lo que conocemos como <strong>tag</strong>, una forma de identificar versiones
-                    específicas de la imagen.
                 </p>
             </div>
         </div>
 
-        <!-- SLIDE 4: Instancias de Contenedores -->
+        <!-- SLIDE 4: Versiones y Tags -->
         <div class="slide">
-            <h2>Múltiples Contenedores, Una Imagen</h2>
+            <h2>Versiones y Tags de Imagen</h2>
 
-            <p style="font-size: 1.4em; margin-bottom: 40px; text-align: center;">
-                Puedes lanzar <strong>tantos contenedores como quieras</strong> a partir de la <strong>misma
-                    imagen</strong>.
+            <p style="font-size: 1.3em; margin-bottom: 30px;">
+                En futuras versiones de nuestra aplicación, podremos crear nuevas versiones de nuestra imagen.
             </p>
 
-
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+                <div style="background: #e3f2fd; padding: 25px; border-radius: 10px; border-left: 5px solid #0073e6;">
+                    <h3 style="color: #0073e6; margin-top: 0;">Nomenclatura</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.0</code> - Primera versión</li>
+                        <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.1</code> - Segunda versión</li>
+                        <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.2</code> - Tercera versión</li>
+                    </ul>
+                </div>
+                <div style="background: #f0f4c3; padding: 25px; border-radius: 10px; border-left: 5px solid #ffc107;">
+                    <h3 style="color: #856404; margin-top: 0;">Componentes</h3>
+                    <p style="font-size: 1.1em; margin-bottom: 15px;">
+                        <strong>PyTweets</strong> = Nombre de la imagen
+                    </p>
+                    <p style="font-size: 1.1em; margin-bottom: 0;">
+                        <strong>1.0, 1.1, 1.2</strong> = Tags (versiones)
+                    </p>
+                </div>
+            </div>
 
             <div class="info-box">
                 <p style="margin: 0; font-size: 1.2em;">
-                    Cada contenedor es una <strong>instancia independiente</strong> de la aplicación. Puedes tener 10,
-                    100 o 1000 contenedores ejecutándose simultáneamente.
+                    Cuando modificamos el código de nuestra aplicación, creamos una nueva versión de la imagen con un nuevo tag. Esto permite mantener múltiples versiones de forma organizada.
                 </p>
             </div>
+        </div>
 
-            <div
-                style="margin-top: 40px; padding: 30px; background: #e3f2fd; border-radius: 10px; border-left: 5px solid #0073e6;">
-                <h3 style="color: #0073e6; margin-top: 0;">Versiones y Tags de Imagen</h3>
-                <p style="font-size: 1.2em; margin-bottom: 15px;">
-                    En futuras versiones de nuestra aplicación, podremos crear nuevas versiones de nuestra imagen:
-                </p>
-                <ul style="font-size: 1.1em; margin-bottom: 20px;">
-                    <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.0</code> -
-                        Primera versión</li>
-                    <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.1</code> -
-                        Segunda versión</li>
-                    <li><code style="background: white; padding: 3px 8px; border-radius: 3px;">PyTweets:1.2</code> -
-                        Tercera versión</li>
-                </ul>
-                <p style="font-size: 1.1em; color: #0073e6; margin: 0;">
-                    <strong>PyTweets</strong> es el nombre de nuestra imagen, mientras que <strong>1.0, 1.1,
-                        1.2</strong> son los tags (versiones) de esa imagen.
-                </p>
+        <!-- SLIDE 5: Múltiples Contenedores, Una Imagen -->
+        <div class="slide">
+            <h2>Múltiples Contenedores, Una Imagen</h2>
+
+            <p style="font-size: 1.4em; margin-bottom: 30px; text-align: center;">
+                Puedes lanzar <strong>tantos contenedores como quieras</strong> a partir de la <strong>misma imagen</strong>.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 1.3em; font-weight: bold; margin-bottom: 20px;">1 Imagen → Múltiples Contenedores</p>
+                    <div style="display: flex; justify-content: space-around; align-items: center;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4em; margin-bottom: 10px;">📦</div>
+                            <p style="font-size: 1.1em; font-weight: bold;">PyTweets:1.0</p>
+                        </div>
+                        <div style="font-size: 3em; color: #0db7ed;">→</div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="background: white; padding: 15px 25px; border-radius: 8px; border: 2px solid #0db7ed;">
+                                <div style="font-size: 2em; margin-bottom: 5px;">🐳</div>
+                                <p style="font-size: 0.95em; margin: 0;">Contenedor 1</p>
+                            </div>
+                            <div style="background: white; padding: 15px 25px; border-radius: 8px; border: 2px solid #0db7ed;">
+                                <div style="font-size: 2em; margin-bottom: 5px;">🐳</div>
+                                <p style="font-size: 0.95em; margin: 0;">Contenedor 2</p>
+                            </div>
+                            <div style="background: white; padding: 15px 25px; border-radius: 8px; border: 2px solid #0db7ed;">
+                                <div style="font-size: 2em; margin-bottom: 5px;">🐳</div>
+                                <p style="font-size: 0.95em; margin: 0;">Contenedor N</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <p style="margin: 0 0 15px 0; font-size: 1.2em; font-weight: bold;">✅ Beneficios</p>
+                    <ul style="font-size: 1.1em; margin: 0;">
+                        <li>Cada contenedor es una <strong>instancia independiente</strong> de la aplicación</li>
+                        <li>Todos comparten la misma imagen base</li>
+                        <li>Puedes tener 10, 100 o 1000 contenedores ejecutándose simultáneamente</li>
+                        <li>La aplicación se comporta igual en todos los contenedores</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
