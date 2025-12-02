@@ -296,7 +296,7 @@ docker run -d \
             <h2>namespaces</h2>
             <div style="margin-bottom: 30px;">
                 <p style="font-size: 1.4em;">
-                    Controlan <strong>qué puede ver</strong> un proceso. Es como darle a cada contenedor su propia "realidad alternativa".
+                    Es como aislar totalmente un proceso, de forma que no pueda ver ni acceder a los recursos del sistema que no le corresponden.
                 </p>
             </div>
 
@@ -345,54 +345,7 @@ docker run -d \
             </div>
         </div>
 
-        <!-- SLIDE 4: Ejemplo visual namespaces -->
-        <div class="slide">
-            <h2>Namespaces en acción: Ejemplo PID</h2>
-
-            <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 50px;">
-                <div style="flex: 1; text-align: center;">
-                    <div style="background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 40px; border-radius: 15px;">
-                        <h3 style="color: white; margin-bottom: 20px;">Dentro del Contenedor</h3>
-                        <div class="code-block" style="text-align: left; font-size: 1em;">
-$ ps aux
-USER  PID  COMMAND
-root    1  nginx
-root   45  php-fpm
-                        </div>
-                        <p style="font-size: 1.3em; margin-top: 20px;">
-                            "Soy el único proceso aquí" 😊
-                        </p>
-                    </div>
-                </div>
-
-                <div style="font-size: 4em; margin: 0 30px;">
-                    ≠
-                </div>
-
-                <div style="flex: 1; text-align: center;">
-                    <div style="background: #34495e; color: white; padding: 40px; border-radius: 15px;">
-                        <h3 style="color: white; margin-bottom: 20px;">En el Host</h3>
-                        <div class="code-block" style="text-align: left; font-size: 1em;">
-$ ps aux | grep nginx
-USER   PID  COMMAND
-root  1523  nginx
-root  1587  php-fpm
-                        </div>
-                        <p style="font-size: 1.3em; margin-top: 20px;">
-                            El mismo proceso con PID diferente 🤯
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tech-box" style="margin-top: 50px;">
-                <p style="text-align: center; font-size: 1.4em; margin: 0;">
-                    <strong>Resultado:</strong> El contenedor no puede ver ni matar procesos de otros contenedores
-                </p>
-            </div>
-        </div>
-
-        <!-- SLIDE 5: Otras tecnologías -->
+        <!-- SLIDE 4: Otras tecnologías -->
         <div class="slide">
             <h2>Otras Tecnologías Importantes</h2>
 
@@ -445,7 +398,7 @@ root  1587  php-fpm
             </div>
         </div>
 
-        <!-- SLIDE 6: Todo junto -->
+        <!-- SLIDE 5: Todo junto -->
         <div class="slide">
             <h2>¿Cómo trabajan juntas?</h2>
 
@@ -490,7 +443,7 @@ root  1587  php-fpm
             </div>
         </div>
 
-        <!-- SLIDE 7: Comparación VMs vs Contenedores (técnico) -->
+        <!-- SLIDE 6: Comparación VMs vs Contenedores (técnico) -->
         <div class="slide">
             <h2>VMs vs Contenedores (nivel técnico)</h2>
 
@@ -533,7 +486,7 @@ root  1587  php-fpm
             </table>
         </div>
 
-        <!-- SLIDE 8: Resumen final -->
+        <!-- SLIDE 7: Resumen final -->
         <div class="slide">
             <h2>Resumen: Las Tecnologías Clave</h2>
 
@@ -573,7 +526,7 @@ root  1587  php-fpm
     </div>
 
     <div class="slide-number">
-        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+        <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
     </div>
 
     <div class="controls">
