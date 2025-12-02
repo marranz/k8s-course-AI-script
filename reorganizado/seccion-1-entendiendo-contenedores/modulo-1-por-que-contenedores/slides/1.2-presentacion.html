@@ -470,11 +470,11 @@ docker run -d \
 
             <div style="margin-top: 40px;">
                 <h3 style="color: #0db7ed; text-align: center;">System Calls Bloqueadas por Defecto en Docker</h3>
-                <div style="background: #2c3e50; color: #ecf0f1; padding: 30px; border-radius: 10px; margin: 30px 0; font-family: 'Courier New', monospace;">
-                    <p style="font-size: 1.2em; margin: 0;">❌ reboot()   - Reiniciar el sistema</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ mount()   - Montar filesystems</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ swapon()  - Cambiar configuración de swap</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0;">❌ ptrace()  - Depurar otros procesos</p>
+                <div style="background: #2c3e50; color: #ffffff; padding: 30px; border-radius: 10px; margin: 30px 0; font-family: 'Courier New', monospace;">
+                    <p style="font-size: 1.2em; margin: 0; color: #ffffff;">❌ reboot()   - Reiniciar el sistema</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ mount()   - Montar filesystems</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ swapon()  - Cambiar configuración de swap</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ ptrace()  - Depurar otros procesos</p>
                 </div>
             </div>
 
@@ -523,91 +523,6 @@ docker run -d \
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 50px; font-size: 2em;">
-                <span style="color: #0db7ed;">🎯</span> = Contenedor seguro, aislado y eficiente
-            </div>
-        </div>
-
-        <!-- SLIDE 9: Comparación VMs vs Contenedores (técnico) -->
-        <div class="slide">
-            <h2>VMs vs Contenedores (nivel técnico)</h2>
-
-            <table class="comparison-table" style="margin-top: 30px;">
-                <tr>
-                    <th>Aspecto</th>
-                    <th>Máquinas Virtuales</th>
-                    <th>Contenedores</th>
-                </tr>
-                <tr>
-                    <td>Aislamiento</td>
-                    <td>Hypervisor virtualiza hardware</td>
-                    <td><strong>Namespaces</strong> aislan procesos</td>
-                </tr>
-                <tr>
-                    <td>Kernel</td>
-                    <td>Cada VM tiene su propio kernel</td>
-                    <td>Todos comparten kernel del host</td>
-                </tr>
-                <tr>
-                    <td>Arranque</td>
-                    <td>Boot completo del OS (1-2 min)</td>
-                    <td>Solo lanzar proceso (&lt; 1 seg) ⚡</td>
-                </tr>
-                <tr>
-                    <td>Overhead</td>
-                    <td>512MB-2GB solo para el OS 😰</td>
-                    <td>~5-50MB para el contenedor 🎉</td>
-                </tr>
-                <tr>
-                    <td>Control de recursos</td>
-                    <td>Hypervisor asigna recursos</td>
-                    <td><strong>cgroups</strong> limitan recursos</td>
-                </tr>
-                <tr>
-                    <td>Seguridad</td>
-                    <td>Muy fuerte (kernel aislado)</td>
-                    <td>Fuerte (mismo kernel, múltiples capas)</td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- SLIDE 10: Resumen final -->
-        <div class="slide">
-            <h2>Resumen: Las Tecnologías Clave</h2>
-
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 40px;">
-                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
-                    <div style="font-size: 3em; margin-bottom: 15px;">🎯</div>
-                    <h3 style="color: white; font-size: 1.5em;">cgroups</h3>
-                    <p style="font-size: 1.1em;">Control de recursos</p>
-                </div>
-
-                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
-                    <div style="font-size: 3em; margin-bottom: 15px;">🔒</div>
-                    <h3 style="color: white; font-size: 1.5em;">namespaces</h3>
-                    <p style="font-size: 1.1em;">Aislamiento</p>
-                </div>
-
-                <div style="text-align: center; background: linear-gradient(135deg, #0db7ed 0%, #0073e6 100%); color: white; padding: 30px; border-radius: 15px;">
-                    <div style="font-size: 3em; margin-bottom: 15px;">📚</div>
-                    <h3 style="color: white; font-size: 1.5em;">UnionFS</h3>
-                    <p style="font-size: 1.1em;">Filesystem eficiente</p>
-                </div>
-            </div>
-
-            <div style="background: #d4edda; padding: 40px; border-radius: 15px; margin-top: 50px; text-align: center;">
-                <p style="font-size: 1.8em; color: #155724; margin: 0;">
-                    <strong>Todo esto junto</strong> = La "magia" de Docker 🐳
-                </p>
-                <p style="font-size: 1.3em; color: #155724; margin-top: 20px;">
-                    (Spoiler: no es magia, es ingeniería del kernel de Linux)
-                </p>
-            </div>
-
-            <div style="text-align: center; margin-top: 40px; font-size: 1.5em; color: #0db7ed;">
-                Siguiente: Conceptos Fundamentales →
             </div>
         </div>
     </div>
