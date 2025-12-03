@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,7 +63,8 @@
             margin: 30px 0 20px 0;
         }
 
-        p, li {
+        p,
+        li {
             color: #34495e;
             font-size: 1.3em;
             line-height: 1.8;
@@ -241,6 +243,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="slide-container">
         <!-- SLIDE 1: Portada -->
@@ -260,7 +263,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
                 <div>
                     <h3>¿Qué hacen?</h3>
-                    <p style="font-size: 1.2em;">Limitan y controlan <strong>cuántos recursos</strong> puede usar un proceso.</p>
+                    <p style="font-size: 1.2em;">Limitan y controlan <strong>cuántos recursos</strong> puede usar un
+                        proceso.</p>
 
                     <h3 style="margin-top: 40px;">¿Qué recursos controlan?</h3>
                     <ul style="margin-top: 20px; font-size: 1.1em;">
@@ -279,10 +283,10 @@
                         </p>
                     </div>
                     <div class="code-block" style="margin-top: 30px; font-size: 0.95em;">
-docker run -d \
-  --memory="512m" \
-  --cpus="0.5" \
-  nginx
+                        docker run -d \
+                        --memory="512m" \
+                        --cpus="0.5" \
+                        nginx
                     </div>
                     <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color: #7f8c8d;">
                         Docker usa cgroups internamente
@@ -296,7 +300,8 @@ docker run -d \
             <h2>namespaces</h2>
             <div style="margin-bottom: 30px;">
                 <p style="font-size: 1.4em;">
-                    Es como aislar totalmente un proceso, de forma que no pueda ver ni acceder a los recursos del sistema que no le corresponden.
+                    Es como aislar totalmente un proceso, de forma que no pueda ver ni acceder a los recursos del
+                    sistema que no le corresponden.
                 </p>
             </div>
 
@@ -328,13 +333,15 @@ docker run -d \
                 <div class="tech-box">
                     <h3 style="margin-top: 0; font-size: 1.3em;">🖥️ UTS namespace</h3>
                     <p style="font-size: 0.9em;">Aislamiento de hostname</p>
-                    <p style="font-size: 0.85em; margin-top: 10px;">Cada contenedor puede tener su propio nombre de host</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Cada contenedor puede tener su propio nombre de host
+                    </p>
                 </div>
 
                 <div class="tech-box">
                     <h3 style="margin-top: 0; font-size: 1.3em;">💬 IPC namespace</h3>
                     <p style="font-size: 0.9em;">Aislamiento de comunicación</p>
-                    <p style="font-size: 0.85em; margin-top: 10px;">Procesos de diferentes contenedores no pueden comunicarse por IPC</p>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Procesos de diferentes contenedores no pueden
+                        comunicarse por IPC</p>
                 </div>
             </div>
 
@@ -351,7 +358,8 @@ docker run -d \
 
             <div style="background: #f0f4c3; padding: 40px; border-radius: 15px; margin: 30px 0;">
                 <p style="font-size: 1.4em; margin: 0; color: #856404;">
-                    <strong>Sistema de archivos en capas</strong> - Permite que múltiples contenedores compartan las mismas capas base
+                    <strong>Sistema de archivos en capas</strong> - Permite que múltiples contenedores compartan las
+                    mismas capas base
                 </p>
             </div>
 
@@ -388,7 +396,8 @@ docker run -d \
 
             <div style="background: #fff3cd; padding: 40px; border-radius: 15px; margin: 30px 0;">
                 <p style="font-size: 1.4em; margin: 0; color: #856404;">
-                    <strong>Permisos granulares</strong> - En lugar de todo o nada (root vs no-root), Linux permite otorgar capacidades específicas
+                    <strong>Permisos granulares</strong> - En lugar de todo o nada (root vs no-root), Linux permite
+                    otorgar capacidades específicas
                 </p>
             </div>
 
@@ -427,12 +436,14 @@ docker run -d \
 
             <div style="background: #f8d7da; padding: 40px; border-radius: 15px; margin: 30px 0;">
                 <p style="font-size: 1.4em; margin: 0; color: #721c24;">
-                    <strong>Mandatory Access Control (MAC)</strong> - Políticas de seguridad que limitan qué puede hacer un proceso, incluso si es root
+                    <strong>Mandatory Access Control (MAC)</strong> - Políticas de seguridad que limitan qué puede hacer
+                    un proceso, incluso si es root
                 </p>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px;">
-                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 30px; border-radius: 10px;">
+                <div
+                    style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 30px; border-radius: 10px;">
                     <h3 style="margin-top: 0; color: white; font-size: 1.5em;">🐧 SELinux</h3>
                     <ul style="font-size: 1.2em;">
                         <li>Usado en Red Hat, CentOS, Fedora</li>
@@ -441,7 +452,8 @@ docker run -d \
                     </ul>
                 </div>
 
-                <div style="background: linear-gradient(135deg, #4ecdc4 0%, #44a0a0 100%); color: white; padding: 30px; border-radius: 10px;">
+                <div
+                    style="background: linear-gradient(135deg, #4ecdc4 0%, #44a0a0 100%); color: white; padding: 30px; border-radius: 10px;">
                     <h3 style="margin-top: 0; color: white; font-size: 1.5em;">🎨 AppArmor</h3>
                     <ul style="font-size: 1.2em;">
                         <li>Usado en Ubuntu, Debian</li>
@@ -464,17 +476,21 @@ docker run -d \
 
             <div style="background: #cfe2ff; padding: 40px; border-radius: 15px; margin: 30px 0;">
                 <p style="font-size: 1.4em; margin: 0; color: #084298;">
-                    <strong>Filtrado de system calls</strong> - Bloquea las llamadas al kernel que un proceso puede hacer
+                    <strong>Filtrado de system calls</strong> - Bloquea las llamadas al kernel que un proceso puede
+                    hacer
                 </p>
             </div>
 
             <div style="margin-top: 40px;">
                 <h3 style="color: #0db7ed; text-align: center;">System Calls Bloqueadas por Defecto en Docker</h3>
-                <div style="background: #2c3e50; color: #ffffff; padding: 30px; border-radius: 10px; margin: 30px 0; font-family: 'Courier New', monospace;">
-                    <p style="font-size: 1.2em; margin: 0; color: #ffffff;">❌ reboot()   - Reiniciar el sistema</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ mount()   - Montar filesystems</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ swapon()  - Cambiar configuración de swap</p>
-                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ ptrace()  - Depurar otros procesos</p>
+                <div
+                    style="background: #2c3e50; color: #ffffff; padding: 30px; border-radius: 10px; margin: 30px 0; font-family: 'Courier New', monospace;">
+                    <p style="font-size: 1.2em; margin: 0; color: #ffffff;">❌ reboot() - Reiniciar el sistema</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ mount() - Montar filesystems</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ swapon() - Cambiar configuración
+                        de swap</p>
+                    <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #ffffff;">❌ ptrace() - Depurar otros procesos
+                    </p>
                 </div>
             </div>
 
@@ -489,34 +505,41 @@ docker run -d \
         <div class="slide">
             <h2>¿Cómo trabajan juntas?</h2>
 
-            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px; border-radius: 15px; margin-top: 30px;">
-                <p style="text-align: center; font-size: 1.6em; margin-bottom: 40px; color: #0db7ed; font-weight: bold;">
-                    Cuando ejecutas: <code style="background: #2c3e50; color: white; padding: 5px 15px; border-radius: 5px;">docker run nginx</code>
+            <div
+                style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px; border-radius: 15px; margin-top: 30px;">
+                <p
+                    style="text-align: center; font-size: 1.6em; margin-bottom: 40px; color: #0db7ed; font-weight: bold;">
+                    Cuando ejecutas: <code
+                        style="background: #2c3e50; color: white; padding: 5px 15px; border-radius: 5px;">docker run nginx</code>
                 </p>
 
                 <div style="display: grid; gap: 20px;">
-                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0db7ed;">
+                    <div
+                        style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0db7ed;">
                         <div style="font-size: 2em; margin-right: 20px;">1️⃣</div>
                         <div>
-                            <strong>Namespaces:</strong> Crean el aislamiento ("este es tu mundo privado")
+                            <strong>Namespaces:</strong> Crean el aislamiento
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0073e6;">
+                    <div
+                        style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0073e6;">
                         <div style="font-size: 2em; margin-right: 20px;">2️⃣</div>
                         <div>
                             <strong>cgroups:</strong> Limitan los recursos ("estos son tus límites")
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #9b59b6;">
+                    <div
+                        style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #9b59b6;">
                         <div style="font-size: 2em; margin-right: 20px;">3️⃣</div>
                         <div>
                             <strong>UnionFS:</strong> Proporciona el filesystem eficiente
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #2ecc71;">
+                    <div
+                        style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #2ecc71;">
                         <div style="font-size: 2em; margin-right: 20px;">4️⃣</div>
                         <div>
                             <strong>Capabilities + SELinux + Seccomp:</strong> Seguridad extra
@@ -567,4 +590,5 @@ docker run -d \
         showSlide(0);
     </script>
 </body>
+
 </html>

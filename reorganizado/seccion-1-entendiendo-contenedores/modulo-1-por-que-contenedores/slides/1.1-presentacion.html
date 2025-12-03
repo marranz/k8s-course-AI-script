@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,8 +44,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
@@ -68,7 +76,8 @@
             margin: 30px 0 20px 0;
         }
 
-        p, li {
+        p,
+        li {
             color: #34495e;
             font-size: 1.3em;
             line-height: 1.8;
@@ -263,6 +272,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="slide-container">
         <!-- SLIDE 1: Portada -->
@@ -279,7 +289,9 @@
             <h2>¿Qué es un Contenedor?</h2>
             <div class="solution-box" style="margin: 30px 0;">
                 <p style="font-size: 1.4em; margin: 0; line-height: 1.8;">
-                    Un <strong>contenedor</strong> es un paquete ligero y aislado que contiene tu aplicación y todo lo que necesita para funcionar: código, librerías, dependencias, variables de entorno y configuraciones.
+                    Un <strong>contenedor</strong> es un paquete ligero y aislado que contiene tu aplicación y todo lo
+                    que necesita para funcionar: código, librerías, dependencias, variables de entorno y
+                    configuraciones.
                 </p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin: 40px 0;">
@@ -296,7 +308,8 @@
                     </p>
                 </div>
             </div>
-            <div style="background: #fff3cd; padding: 30px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 30px 0;">
+            <div
+                style="background: #fff3cd; padding: 30px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 30px 0;">
                 <p style="font-size: 1.2em; margin: 0; color: #856404;"><strong>🔑 Concepto clave:</strong></p>
                 <p style="font-size: 1.2em; margin: 15px 0 0 0; color: #856404;">
                     Comparte el kernel del SO anfitrión, pero aísla el resto de recursos (procesos, red, almacenamiento)
@@ -315,7 +328,8 @@
             </div>
             <div style="text-align: center; margin: 30px 0;">
                 <p style="font-size: 1.8em; color: #856404; font-weight: bold; margin-bottom: 20px;">Sucede esto:</p>
-                <img src="images/explosion1.gif" alt="Explosión" style="width: 400px; height: auto; border-radius: 10px;">
+                <img src="images/explosion1.gif" alt="Explosión"
+                    style="width: 400px; height: auto; border-radius: 10px;">
             </div>
         </div>
 
@@ -343,7 +357,8 @@
             <div class="solution-box">
                 <h3 style="margin-top: 0; color: #155724;">✅ Entorno Consistente</h3>
                 <p style="font-size: 1.4em;">
-                    Lo que tienes en tu entorno local es una <strong>copia exacta</strong> de lo que tendrás en producción.
+                    Lo que tienes en tu entorno local es una <strong>copia exacta</strong> de lo que tendrás en
+                    producción.
                 </p>
             </div>
             <div style="display: flex; justify-content: space-around; margin-top: 50px; font-size: 1.5em;">
@@ -374,14 +389,14 @@
                 <div class="tech-card">
                     <h3>🖥️ Bare Metal</h3>
                     <p>Hardware dedicado</p>
-                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">1-3 apps</p>
+                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">1 app por servidor</p>
                     <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">32GB RAM, 8 CPUs</p>
                     <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.85;">❌ Sin réplicas nativas</p>
                 </div>
                 <div class="tech-card">
                     <h3>🖼️ VMs</h3>
                     <p>Sistema operativo completo</p>
-                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">8-15 apps</p>
+                    <p style="font-size: 1.2em; margin-top: 20px; font-weight: bold;">1 app por vm, multiples vms </p>
                     <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">32GB RAM, 8 CPUs</p>
                     <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.85;">⚙️ Réplicas con config. manual</p>
                 </div>
@@ -482,7 +497,8 @@
 
         <!-- SLIDE 9: Final -->
         <div class="slide">
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center;">
+            <div
+                style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center;">
                 <div style="font-size: 8em; margin-bottom: 30px;">🎉</div>
                 <h1 style="margin-bottom: 30px;">¡Listo para contenedores!</h1>
                 <p style="font-size: 1.8em; color: #7f8c8d;">
@@ -535,4 +551,5 @@
         showSlide(0);
     </script>
 </body>
+
 </html>
