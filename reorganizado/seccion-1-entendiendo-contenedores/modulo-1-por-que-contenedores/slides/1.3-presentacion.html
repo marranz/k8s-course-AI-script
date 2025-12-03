@@ -367,10 +367,7 @@
                 <p style="font-size: 1.2em; margin-bottom: 15px;">
                     Partimos de una imagen base oficial que ya tiene Python instalado:
                 </p>
-                <div class="code-block">
-                    python-base:3.6
-                    (Mantenida por el equipo oficial de Python)
-                </div>
+                <div class="code-block">FROM python-base:3.6<br># Mantenida por el equipo oficial de Python</div>
             </div>
 
             <div style="margin-top: 30px;">
@@ -486,7 +483,7 @@
 
         <!-- SLIDE 6: Capas de una Imagen -->
         <div class="slide">
-            <h2>🔗 Capas (Layers)</h2>
+            <h2>🔗 Capas (Layers) y CoW (Copy-on-Write)</h2>
 
             <p style="font-size: 1.3em; margin-bottom: 30px;">
                 Las imágenes están construidas en <strong>capas de solo lectura apiladas</strong>. Cada instrucción en
@@ -685,8 +682,7 @@
                     <div style="font-size: 1.5em; color: #0db7ed;">↔️</div>
                     <div style="text-align: center;">
                         <p style="margin: 0; font-weight: bold;">Contenedor</p>
-                        <p style="margin: 10px 0 0 0; background: #d4edda; padding: 10px; border-radius: 5px;">puerto
-                            8080</p>
+                        <p style="margin: 10px 0 0 0; background: #d4edda; padding: 10px; border-radius: 5px;">puerto 8080</p>
                     </div>
                 </div>
             </div>
