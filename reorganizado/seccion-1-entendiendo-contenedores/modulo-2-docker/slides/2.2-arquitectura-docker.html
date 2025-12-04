@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.2 Arquitectura y Componentes de Docker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .slides-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+            background: white;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        p, li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 40px;
+            list-style: none;
+        }
+
+        li {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .box.small {
+            min-width: 100px;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        .box.light {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .arrow {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .stack-item {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stack-item.alt {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 1em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .security {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #721c24;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .comparison {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .comparison h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+                min-height: 500px;
+            }
+
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.6em; }
+
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .diagram {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide active">
+            <h1>2.2 Arquitectura de Docker</h1>
+            <p class="subtitle">Entendiendo la arquitectura cliente-servidor y los componentes internos de Docker</p>
+            <div style="margin-top: 60px; text-align: center; color: #666;">
+                <p style="font-size: 1.2em;">🐳 Docker utiliza una arquitectura modular y eficiente</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Modelo Cliente-Servidor -->
+        <div class="slide">
+            <h2>1. El Modelo Cliente-Servidor</h2>
+            <div class="diagram">
+                <div class="box">
+                    <strong>Docker CLI</strong><br>
+                    <small>(Tu terminal)</small>
+                </div>
+                <div class="arrow">↔️</div>
+                <div class="box">
+                    <strong>Docker Daemon</strong><br>
+                    <small>(dockerd)</small>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; font-size: 1em; color: #666;">
+                Comunicación a través de <strong>Docker Socket</strong> (/var/run/docker.sock)
+            </p>
+            <div class="note">
+                <strong>💡 Nota:</strong> El cliente no hace el trabajo real. Envía peticiones a través de una API REST al Docker Daemon.
+            </div>
+        </div>
+
+        <!-- Slide 3: Componentes del Modelo -->
+        <div class="slide">
+            <h2>Componentes Principales</h2>
+            <h3>El Cliente (Docker CLI)</h3>
+            <ul>
+                <li>Es la herramienta <span class="highlight">docker</span> que usas en la terminal</li>
+                <li>Cuando ejecutas <span class="highlight">docker build</span> o <span class="highlight">docker run</span>, no hace el trabajo real</li>
+                <li>Envía peticiones a través de la API REST del Docker Daemon</li>
+            </ul>
+
+            <h3>El Servidor (Docker Daemon - dockerd)</h3>
+            <ul>
+                <li>Proceso persistente que corre en segundo plano</li>
+                <li>Escucha las peticiones via su API REST</li>
+                <li>Gestiona todos los objetos: imágenes, contenedores, redes, volúmenes</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: Docker Socket (Seguridad) -->
+        <div class="slide">
+            <h2>Canal de Comunicación: Docker Socket</h2>
+            <p style="font-size: 1.15em;">La comunicación Cliente ↔ Daemon ocurre a través de un <strong>Socket Unix</strong></p>
+
+            <div class="code-block">
+/var/run/docker.sock
+            </div>
+
+            <div class="security">
+                <strong>⚠️ IMPORTANTE - Nota de Seguridad:</strong><br>
+                Quien tenga acceso a este socket tiene acceso de <strong>root</strong> al sistema, ya que puede crear contenedores privilegiados que pueden comprometer todo el host.
+            </div>
+
+            <p style="margin-top: 30px;"><strong>Ventaja Clave:</strong> Esta arquitectura permite que el cliente y servidor corran en <strong>diferentes máquinas</strong>, especialmente útil para despliegue en servidores remotos.</p>
+        </div>
+
+        <!-- Slide 5: Motor Interno - Capas -->
+        <div class="slide">
+            <h2>2. El Motor Interno: Arquitectura Modular</h2>
+            <p>Docker ha evolucionado de un monolito a una arquitectura modular (filosofía UNIX):</p>
+
+            <div style="margin: 30px 0; text-align: center;">
+                <div class="box light" style="margin: 0 auto; width: 80%; max-width: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <strong>🐳 Docker CLI</strong><br>
+                    <small>(Tu terminal)</small>
+                </div>
+                <div style="font-size: 1.5em; color: #667eea; margin: 15px 0;">↓</div>
+            </div>
+
+            <div class="stack">
+                <div class="stack-item">📦 Docker Daemon (dockerd)</div>
+                <div style="text-align: center; font-size: 1.5em; color: #667eea;">↓</div>
+                <div class="stack-item">⚙️ containerd - Gestor del ciclo de vida</div>
+                <div style="text-align: center; font-size: 1.5em; color: #667eea;">↓</div>
+                <div class="stack-item">🔧 runc - Interactúa con el Kernel</div>
+                <div style="text-align: center; font-size: 1.5em; color: #667eea;">↓</div>
+                <div class="stack-item">🪠 shim - Mantiene el contenedor vivo</div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Funciones de cada componente -->
+        <div class="slide">
+            <h2>Función de Cada Componente</h2>
+
+            <h3>1. dockerd (Docker Daemon)</h3>
+            <ul>
+                <li>Recibe peticiones de la API REST (ej: "crear contenedor")</li>
+            </ul>
+
+            <h3>2. containerd</h3>
+            <ul>
+                <li>Gestiona el ciclo de vida de contenedores</li>
+                <li>Descarga imágenes, prepara almacenamiento</li>
+            </ul>
+
+            <h3>3. runc</h3>
+            <ul>
+                <li>Interactúa con el Kernel Linux</li>
+                <li>Crea procesos aislados usando Namespaces y Cgroups</li>
+            </ul>
+
+            <h3>4. shim</h3>
+            <ul>
+                <li>Proceso ligero "pegado" al contenedor</li>
+                <li>Recoge el código de salida del proceso</li>
+                <li>Permite que dockerd se reinicie sin matar contenedores</li>
+            </ul>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">6</span></span>
+            <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Inicializar
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

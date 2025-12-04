@@ -1,0 +1,415 @@
+# 2.7 Docker en Producción y Seguridad
+
+## Introducción
+
+Ejecutar contenedores en producción requiere consideraciones especiales de seguridad, rendimiento y confiabilidad que no son necesarias en desarrollo.
+
+## Seguridad de Contenedores
+
+### 1. No Ejecutar como Root
+
+#### Problema
+Por defecto, los procesos en contenedores se ejecutan como root, lo cual es un riesgo de seguridad.
+
+#### Solución
+```dockerfile
+# Crear usuario no privilegiado
+FROM node:18-alpine
+
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup
+
+WORKDIR /app
+COPY --chown=appuser:appgroup . .
+
+USER appuser
+
+CMD ["node", "server.js"]
+```
+
+#### Verificar
+```bash
+# Ver con qué usuario corre el proceso
+docker exec <container> ps aux
+```
+
+### 2. Escaneo de Vulnerabilidades
+
+#### Docker Scan (built-in)
+```bash
+# Escanear imagen
+docker scan myapp:latest
+
+# Escanear con reporte detallado
+docker scan --file Dockerfile myapp:latest
+
+# Solo mostrar vulnerabilidades críticas
+docker scan --severity high myapp:latest
+```
+
+#### Trivy (recomendado)
+```bash
+# Instalar Trivy
+brew install aquasecurity/trivy/trivy  # macOS
+# o
+docker run aquasec/trivy image myapp:latest
+
+# Escanear imagen
+trivy image myapp:latest
+
+# Solo vulnerabilidades críticas y altas
+trivy image --severity CRITICAL,HIGH myapp:latest
+
+# Generar reporte JSON
+trivy image -f json -o results.json myapp:latest
+```
+
+#### Integración en CI/CD
+```yaml
+# GitHub Actions
+- name: Run Trivy vulnerability scanner
+  uses: aquasecurity/trivy-action@master
+  with:
+    image-ref: 'myapp:latest'
+    format: 'sarif'
+    output: 'trivy-results.sarif'
+```
+
+### 3. Secretos y Credenciales
+
+#### ❌ MAL - Hardcoded
+```dockerfile
+ENV API_KEY=12345abcde
+ENV DB_PASSWORD=supersecret
+```
+
+#### ✅ BIEN - Variables de Entorno
+```bash
+# Pasar en runtime
+docker run -e API_KEY=$API_KEY -e DB_PASSWORD=$DB_PASS myapp
+```
+
+#### ✅ MEJOR - Docker Secrets (Swarm)
+```bash
+# Crear secret
+echo "my_secret_password" | docker secret create db_password -
+
+# Usar en servicio
+docker service create \
+  --name myapp \
+  --secret db_password \
+  myapp:latest
+```
+
+#### ✅ MEJOR - Vault/External Secrets
+```javascript
+// Cargar secretos desde Vault
+const vault = require('node-vault')();
+const secrets = await vault.read('secret/data/myapp');
+```
+
+### 4. Minimizar Superficie de Ataque
+
+#### Usar Imágenes Mínimas
+```dockerfile
+# ❌ Grande - 900MB
+FROM node:18
+
+# ✅ Mejor - 180MB
+FROM node:18-slim
+
+# ✅ Óptimo - 120MB
+FROM node:18-alpine
+
+# ✅ Extremo - solo binario (Go, Rust)
+FROM scratch
+COPY --from=builder /app/binary /binary
+ENTRYPOINT ["/binary"]
+```
+
+#### Distroless (Google)
+```dockerfile
+# Para aplicaciones que no necesitan shell
+FROM gcr.io/distroless/nodejs18-debian11
+COPY app.js package.json ./
+CMD ["app.js"]
+```
+
+#### Comparación
+- **alpine:** 5-10 MB base, tiene shell
+- **distroless:** 10-50 MB, NO shell, más seguro
+- **scratch:** 0 MB, solo tu binario
+
+### 5. Limitar Capacidades del Kernel
+
+```bash
+# Quitar capacidades peligrosas
+docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE myapp
+
+# Ver capacidades actuales
+docker exec <container> capsh --print
+```
+
+### 6. Read-Only Filesystem
+
+```bash
+# Filesystem de solo lectura
+docker run --read-only --tmpfs /tmp myapp
+
+# En Compose
+services:
+  app:
+    image: myapp
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run
+```
+
+### 7. No Exponer Docker Socket
+
+```bash
+# ❌ PELIGROSO - Acceso total al host
+docker run -v /var/run/docker.sock:/var/run/docker.sock myapp
+
+# Solo hacerlo si es absolutamente necesario y confías en la imagen
+```
+
+## Gestión de Recursos
+
+### 1. Limitar CPU
+
+```bash
+# Límite de CPUs
+docker run --cpus="1.5" myapp
+
+# CPU shares (relativo)
+docker run --cpu-shares=512 myapp
+
+# En Compose
+services:
+  app:
+    image: myapp
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+        reservations:
+          cpus: '1.0'
+```
+
+### 2. Limitar Memoria
+
+```bash
+# Límite de memoria
+docker run -m 512m myapp
+
+# Memoria + Swap
+docker run -m 512m --memory-swap=1g myapp
+
+# Sin swap
+docker run -m 512m --memory-swap=512m myapp
+
+# En Compose
+services:
+  app:
+    image: myapp
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+```
+
+### 3. Evitar OOM Killer
+
+```bash
+# Prioridad para OOM killer (0-1000, mayor = menos prioridad)
+docker run --oom-score-adj=500 myapp
+```
+
+## Restart Policies
+
+```bash
+# No reiniciar
+docker run --restart=no myapp
+
+# Siempre reiniciar
+docker run --restart=always myapp
+
+# Reiniciar si falla (hasta 5 veces)
+docker run --restart=on-failure:5 myapp
+
+# Reiniciar a menos que se detenga manualmente
+docker run --restart=unless-stopped myapp  # RECOMENDADO para producción
+```
+
+## Logging en Producción
+
+### 1. Drivers de Logging
+
+```bash
+# JSON (default)
+docker run --log-driver=json-file myapp
+
+# Syslog
+docker run --log-driver=syslog myapp
+
+# Journald
+docker run --log-driver=journald myapp
+
+# GELF (Graylog)
+docker run --log-driver=gelf \
+  --log-opt gelf-address=udp://logs.example.com:12201 \
+  myapp
+```
+
+### 2. Rotación de Logs
+
+```bash
+# Limitar tamaño de logs
+docker run \
+  --log-opt max-size=10m \
+  --log-opt max-file=3 \
+  myapp
+
+# En daemon.json
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}
+```
+
+### 3. Logs Estructurados
+
+```javascript
+// Usar librería de logging estructurado
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  format: winston.format.json(),
+  transports: [new winston.transports.Console()]
+});
+
+logger.info('Server started', {
+  port: 3000,
+  environment: 'production',
+  version: '1.0.0'
+});
+```
+
+## Health Checks en Producción
+
+### Dockerfile
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+```
+
+### Endpoint de Health
+```javascript
+app.get('/health', async (req, res) => {
+  const checks = {
+    uptime: process.uptime(),
+    message: 'OK',
+    timestamp: Date.now()
+  };
+
+  try {
+    // Check database
+    await db.ping();
+    checks.database = 'connected';
+
+    // Check redis
+    await redis.ping();
+    checks.cache = 'connected';
+
+    res.status(200).json(checks);
+  } catch (error) {
+    checks.message = error.message;
+    res.status(503).json(checks);
+  }
+});
+```
+
+## Mejores Prácticas de Seguridad
+
+### Checklist
+- [ ] Usar imágenes oficiales verificadas
+- [ ] Mantener imágenes actualizadas
+- [ ] Escanear vulnerabilidades regularmente
+- [ ] No ejecutar como root
+- [ ] No incluir secretos en imágenes
+- [ ] Usar imágenes mínimas (alpine/distroless)
+- [ ] Limitar recursos (CPU/memoria)
+- [ ] Configurar restart policies
+- [ ] Implementar health checks
+- [ ] Usar read-only filesystem cuando sea posible
+- [ ] No exponer Docker socket
+- [ ] Limitar capacidades del kernel
+- [ ] Rotación de logs configurada
+
+### Content Trust (Firma de Imágenes)
+
+```bash
+# Habilitar content trust
+export DOCKER_CONTENT_TRUST=1
+
+# Solo puedes pull/push imágenes firmadas
+docker pull alpine:latest
+
+# Firmar tu imagen
+docker trust sign myregistry/myimage:v1
+```
+
+## Monitoreo
+
+### Docker Stats
+```bash
+# Ver uso de recursos en tiempo real
+docker stats
+
+# Formato personalizado
+docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+```
+
+### cAdvisor (Google)
+```bash
+docker run -d \
+  --name=cadvisor \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:ro \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  -p 8080:8080 \
+  google/cadvisor:latest
+```
+
+### Prometheus + Grafana
+```yaml
+# docker-compose.yml
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+```
+
+## Recursos Adicionales
+
+- [CIS Docker Benchmark](https://www.cisecurity.org/benchmark/docker)
+- [Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)
+- [Trivy Documentation](https://aquasecurity.github.io/trivy/)

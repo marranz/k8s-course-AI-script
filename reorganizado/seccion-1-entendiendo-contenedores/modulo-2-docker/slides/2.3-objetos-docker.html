@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.3 Objetos de Docker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .slides-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+            background: white;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        p,
+        li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 40px;
+            list-style: none;
+        }
+
+        li {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .box.small {
+            min-width: 100px;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        .box.light {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .arrow {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .stack-item {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stack-item.alt {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 1em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .security {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #721c24;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .comparison {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .comparison h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+                min-height: 500px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .diagram {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slides-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide active">
+            <h1>2.3 Objetos de Docker</h1>
+            <p class="subtitle">Imágenes, Contenedores, Volúmenes, Redes y Registros</p>
+            <div style="margin-top: 60px; text-align: center; color: #666;">
+                <p style="font-size: 1.2em;">🐳 Los bloques de construcción de Docker</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Imágenes y Capas -->
+        <div class="slide">
+            <h2>1. Imágenes: Capas y UnionFS</h2>
+            <p>Una imagen <strong>no es un archivo único</strong>, sino un conjunto de <strong>capas de solo
+                    lectura</strong> apiladas.</p>
+
+            <div style="margin: 40px 0;">
+                <div class="stack">
+                    <div class="stack-item small">Capa 1: Base (ubuntu)</div>
+                    <div class="stack-item small">Capa 2: Sistema (librerias y runtime)</div>
+                    <div class="stack-item small">Capa 3: Aplicación (código)</div>
+                </div>
+            </div>
+
+            <h3>Union File System (UnionFS)</h3>
+            <ul>
+                <li>Docker usa <span class="highlight">overlay2</span> para combinar capas en una sola vista</li>
+                <li>Los archivos se superponen transparentemente</li>
+            </ul>
+
+            <h3>Ventaja: Eficiencia de Almacenamiento</h3>
+            <ul>
+                <li>Si tienes 10 imágenes basadas en <span class="highlight">ubuntu</span>, solo se almacena la capa
+                    <span class="highlight">ubuntu</span> una vez
+                </li>
+                <li>Se comparte entre todas las imágenes</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Copy-on-Write -->
+        <div class="slide">
+            <h2>Copy-on-Write (CoW)</h2>
+            <p style="font-size: 1.15em;">Mecanismo que permite modificar archivos sin afectar las capas originales:</p>
+
+            <div style="margin: 40px 0; text-align: center;">
+                <p><strong>Quieres modificar un archivo en una capa inferior...</strong></p>
+                <div style="font-size: 1.5em; color: #667eea; margin: 20px 0;">↓</div>
+                <p><strong>El sistema crea los ficheros nuevos en la capa de escritura</strong></p>
+                <div style="font-size: 1.5em; color: #667eea; margin: 20px 0;">↓</div>
+                <p><strong>La capa original de solo lectura permanece intacta</strong></p>
+            </div>
+
+            <h3>Inspeccionar capas en la práctica:</h3>
+            <div class="code-block">
+                docker inspect &lt;imagen&gt; # Muestra todas las capas<br>
+                docker history &lt;imagen&gt; # Muestra cada instrucción del Dockerfile
+            </div>
+
+            <p style="margin-top: 20px; font-size: 0.95em; color: #666;">💡 Útil para entender por qué una imagen pesa
+                lo que pesa y optimizarla.</p>
+        </div>
+
+        <!-- Slide 4: Contenedores -->
+        <div class="slide">
+            <h2>2. Contenedores: La Capa de Escritura</h2>
+            <p>Cuando arrancas un contenedor, Docker toma las capas de la imagen (solo lectura) y añade una <strong>fina
+                    capa de escritura</strong> encima.</p>
+
+            <div style="margin: 40px 0;">
+                <div class="box light" style="margin: 0 auto; width: 80%; max-width: 400px;">
+                    <strong style="color: #667eea;">Read/Write Layer</strong><br>
+                    (Cambios del contenedor)
+                </div>
+                <div style="text-align: center; font-size: 1.5em; color: #667eea; margin: 15px 0;">↑↓</div>
+                <div class="box light" style="margin: 0 auto; width: 80%; max-width: 400px;">
+                    <strong style="color: #667eea;">Capas de la Imagen</strong><br>
+                    (Solo lectura)
+                </div>
+            </div>
+
+            <h3>Características:</h3>
+            <ul>
+                <li>Cualquier cambio que hace el contenedor se escribe en esta capa efímera</li>
+                <li>Si borras el contenedor, <strong>esta capa se pierde</strong></li>
+                <li>Por eso los contenedores son <strong>efímeros por defecto</strong></li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: Volúmenes -->
+        <div class="slide">
+            <h2>3. Volúmenes: Persistencia de Datos</h2>
+            <p>Para guardar datos más allá de la vida del contenedor, usamos <strong>Volúmenes</strong>:</p>
+
+            <h3>1. Volúmenes Gestionados por Docker ⭐ (recomendado)</h3>
+            <ul>
+                <li>Docker los gestiona automáticamente en <span class="highlight">/var/lib/docker/volumes/</span></li>
+                <li>El método más seguro y portable</li>
+                <li>Se crean con <span class="highlight">docker volume create</span></li>
+            </ul>
+
+            <h3>2. Bind Mounts (montar directorios del host)</h3>
+            <ul>
+                <li>Montas un directorio específico del host dentro del contenedor</li>
+                <li>Útil en desarrollo para reflejar cambios en tiempo real</li>
+                <li>Menos portable (dependen de la estructura del host)</li>
+            </ul>
+
+            <h3>3. tmpfs Mounts (almacenamiento en memoria)</h3>
+            <ul>
+                <li>Los datos se guardan en la RAM, no en disco</li>
+                <li>Muy rápido pero se pierde al parar el contenedor</li>
+                <li>Útil para datos sensibles o caché temporal</li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Características de Volúmenes -->
+        <div class="slide">
+            <h2>Características Comunes de Volúmenes</h2>
+
+            <ul>
+                <li>Sobreviven al borrado del contenedor <strong>(excepto tmpfs)</strong></li>
+                <li>Pueden ser compartidos entre múltiples contenedores</li>
+                <li>Se "montan" dentro del contenedor en cualquier ruta</li>
+                <li>Independientes del ciclo de vida del contenedor</li>
+            </ul>
+
+            <div style="margin-top: 50px; background: #f0f4ff; padding: 20px; border-radius: 8px;">
+                <h3 style="color: #667eea; margin-top: 0;">Caso de Uso Típico:</h3>
+                <p>Base de datos + Volumen = Los datos persisten incluso si borras el contenedor y lo recreas</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Redes Container Network Model -->
+        <div class="slide">
+            <h2>4. Redes: Container Network Model (CNM)</h2>
+            <p>Docker implementa el <strong>Container Network Model (CNM)</strong> para conectar contenedores. Cada tipo
+                tiene un caso de uso específico:</p>
+
+            <h3>🌉 Bridge (predeterminada)</h3>
+            <ul>
+                <li>Los contenedores se ven entre sí por nombre o IP dentro de la red</li>
+                <li><strong>Caso de uso:</strong> Aplicaciones multi-contenedor en el mismo host (Docker Compose local)
+                </li>
+            </ul>
+
+            <h3>🖥️ Host</h3>
+            <ul>
+                <li>El contenedor comparte la pila de red del host (sin aislamiento)</li>
+                <li><strong>Caso de uso:</strong> Máxima performance (bases de datos, reverse proxies)</li>
+                <li><strong>Desventaja:</strong> No hay aislamiento, el contenedor ve todos los puertos del host</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Redes - Continuación -->
+        <div class="slide">
+            <h2>Tipos de Redes: Continuación</h2>
+
+            <h3>🚫 None</h3>
+            <ul>
+                <li>El contenedor no tiene interfaz de red (aislamiento total)</li>
+                <li><strong>Caso de uso:</strong> Contenedores que solo procesan datos sin necesidad de red</li>
+            </ul>
+
+            <h3>🌐 Overlay</h3>
+            <ul>
+                <li>Para conectar contenedores en diferentes hosts</li>
+                <li><strong>Caso de uso:</strong> Docker Swarm, Kubernetes y otros orquestadores de cluster</li>
+                <li>Crea una red virtual encriptada entre nodos</li>
+            </ul>
+
+            <div style="margin-top: 40px; background: #f0f4ff; padding: 20px; border-radius: 8px;">
+                <p style="margin: 0;"><strong>💡 Resumen:</strong> La red que elijas depende de tu caso de uso y nivel
+                    de aislamiento necesario.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: El Registro -->
+        <div class="slide">
+            <h2>5. El Registro (Docker Hub y Registros Privados)</h2>
+            <p>El registro es el <strong>almacén centralizado de imágenes</strong> que consulta cuando necesitas
+                descargar una imagen.</p>
+
+            <h3>Docker Hub (hub.docker.com)</h3>
+            <ul>
+                <li>Registro público oficial</li>
+                <li>Contiene imágenes públicas (oficiales y de usuarios)</li>
+                <li>Cuando ejecutas <span class="highlight">docker pull ubuntu</span>, trae la imagen de Hub</li>
+            </ul>
+
+            <h3>Registros Privados</h3>
+            <ul>
+                <li>Empresas y equipos usan registros propios</li>
+                <li>Docker Registry (open source) o soluciones gestionadas (AWS ECR, Google Artifact Registry)</li>
+                <li>Útil para guardar imágenes internas sin exponerlas públicamente</li>
+            </ul>
+        </div>
+
+        <!-- Slide 10: Flujo de Descarga -->
+        <div class="slide">
+            <h2>Flujo de Descarga de Imágenes</h2>
+
+            <div class="stack">
+                <div class="stack-item small">1. Ejecutas: docker pull myimage:latest</div>
+                <div style="text-align: center; font-size: 1.3em; color: #667eea;">↓</div>
+                <div class="stack-item small">2. Daemon consulta el registro (Docker Hub por defecto)</div>
+                <div style="text-align: center; font-size: 1.3em; color: #667eea;">↓</div>
+                <div class="stack-item small">3. Daemon descarga las capas necesarias</div>
+                <div style="text-align: center; font-size: 1.3em; color: #667eea;">↓</div>
+                <div class="stack-item small">4. Las capas se almacenan en /var/lib/docker/image/</div>
+                <div style="text-align: center; font-size: 1.3em; color: #667eea;">↓</div>
+                <div class="stack-item small">5. Se construye la imagen a partir de las capas</div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Resumen -->
+        <div class="slide">
+            <h2>Resumen: Puntos Clave</h2>
+
+            <ul style="font-size: 1.05em;">
+                <li>✅ Las imágenes son <strong>capas apiladas</strong> usando UnionFS (overlay2)</li>
+                <li>✅ Los contenedores añaden una <strong>capa de escritura</strong> efímera encima</li>
+                <li>✅ <strong>Copy-on-Write</strong> permite modificaciones sin afectar las capas originales</li>
+                <li>✅ Los <strong>volúmenes</strong> proporcionan persistencia de datos</li>
+                <li>✅ <strong>CNM</strong> proporciona 4 tipos de redes: Bridge, Host, None, Overlay</li>
+                <li>✅ Docker Hub y registros privados <strong>almacenan y distribuyen imágenes</strong></li>
+            </ul>
+
+            <div style="margin-top: 40px; text-align: center; color: #667eea; font-size: 1.2em;">
+                <strong>🎯 Dominar estos objetos es esencial para trabajar con Docker</strong>
+            </div>
+        </div>
+
+        <!-- Slide 12: Fin -->
+        <div class="slide">
+            <h1 style="margin-bottom: 60px;">¿Preguntas?</h1>
+            <div style="text-align: center;">
+                <p style="font-size: 1.2em; color: #667eea; margin-bottom: 40px;">
+                    <strong>2.3 Objetos de Docker</strong>
+                </p>
+                <p style="color: #666; font-size: 1.05em;">
+                    Ya entiendes cómo Docker construye soluciones con imágenes, contenedores, volúmenes y redes.
+                </p>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">12</span></span>
+            <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Inicializar
+        showSlide(currentSlide);
+    </script>
+</body>
+
+</html>
