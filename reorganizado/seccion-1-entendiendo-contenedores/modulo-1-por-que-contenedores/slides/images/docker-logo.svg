@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+  <!-- Logo oficial de Docker -->
+  <defs>
+    <style>
+      .docker-blue { fill: #0db7ed; }
+    </style>
+  </defs>
+  <g class="docker-blue">
+    <!-- Contenedores (bloques) -->
+    <rect x="120" y="200" width="45" height="40" rx="3"/>
+    <rect x="170" y="200" width="45" height="40" rx="3"/>
+    <rect x="220" y="200" width="45" height="40" rx="3"/>
+    <rect x="270" y="200" width="45" height="40" rx="3"/>
+
+    <rect x="170" y="155" width="45" height="40" rx="3"/>
+    <rect x="220" y="155" width="45" height="40" rx="3"/>
+    <rect x="270" y="155" width="45" height="40" rx="3"/>
+
+    <rect x="220" y="110" width="45" height="40" rx="3"/>
+    <rect x="270" y="110" width="45" height="40" rx="3"/>
+
+    <!-- Ballena (parte superior) -->
+    <path d="M349.9 236.3h-66.1v-59.4h66.1v59.4zm-48.6-26.7h-11.9v-11.9h11.9v11.9zm24.3 0h-11.9v-11.9h11.9v11.9zm24.3 0h-11.9v-11.9h11.9v11.9z"/>
+
+    <!-- Cuerpo de la ballena -->
+    <path d="M640 250.9c0 12.7-10.3 23-23 23s-23-10.3-23-23c0-12.7 10.3-23 23-23s23 10.3 23 23zm-161.7-78.4c-18.2-18.2-48-18.2-66.3 0-12.1 12.1-16.5 28.8-13.4 44.6l-30.8 30.8c-15.8-3.2-32.5 1.2-44.6 13.4-18.2 18.2-18.2 48 0 66.3s48 18.2 66.3 0c12.1-12.1 16.5-28.8 13.4-44.6l30.8-30.8c15.8 3.2 32.5-1.2 44.6-13.4 18.2-18.3 18.2-48 0-66.3z"/>
+
+    <!-- Aleta -->
+    <path d="M95.8 256.7l-50.7 24.2c-4.1-4.4-7.5-9.5-10.1-15.2l58.8-28c1.7 6.8 3.8 13.3 6.3 19.6zm-83.2-50.7c1.5-4.2 3.4-8.2 5.6-12l66.5 31.6c-1.2 3.8-2.1 7.7-2.6 11.7l-69.5-33z"/>
+
+    <!-- Contenedores adicionales (detalle) -->
+    <rect x="70" y="200" width="45" height="40" rx="3"/>
+    <rect x="20" y="200" width="45" height="40" rx="3"/>
+  </g>
+</svg>

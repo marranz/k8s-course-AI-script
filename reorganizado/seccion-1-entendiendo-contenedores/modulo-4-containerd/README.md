@@ -6,6 +6,7 @@
 2. [4.2 Introducción a Containerd](./4.2-introduccion-containerd.md)
 3. [4.3 Containerd como Motor de Kubernetes](./4.3-containerd-kubernetes.md)
 4. [4.4 Laboratorio con Containerd](./4.4-laboratorio-containerd.md)
+5. [4.5 Alternativas: Podman y Otras Opciones](./4.5-alternativas-podman.md) ⭐ NUEVO
 
 ## Objetivos
 
